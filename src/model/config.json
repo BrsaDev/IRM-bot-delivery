@@ -1,15 +1,1 @@
-{
-    "5522992238683": {
-        "nome_qrcode": "qr-code-5522992238683-1675532242417",
-        "autenticado": false,
-        "inicializado": false,
-        "falha": false,
-        "BASE_URL": "https://api.clickup.com/api/v2",
-        "TOKEN": "pk_49066639_XSIUG7EJJ6V8C3PNXLSXVO6YSXLH87H9",
-        "MODEL_LOCAL": "./src/model/5522992238683.json",
-        "ID_LISTA_CLIENTES": "199131633",
-        "ID_TEAM_CLICKUP": "2389876",
-        "TELEFONE_NOTIFICACAO": "5522992238683@c.us",
-        "TAREFA_MASTER": "2v7aytx"
-    }
-}
+{}
