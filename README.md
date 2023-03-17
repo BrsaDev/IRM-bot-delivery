@@ -1,5 +1,7 @@
-<h1 align="center"> Integração </h1>
-<h1 align="center"> Whatsapp <- -> Click-Up </h1>
+<div>
+    <h1 align="center"> Integração </h1>
+    <h1 align="center"> Whatsapp <- -> Click-Up </h1>
+</div>
 
 Descrição:
 
