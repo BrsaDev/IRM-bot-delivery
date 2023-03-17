@@ -1,0 +1,69 @@
+.btn-whatsapp {
+    bottom: 50px;
+    right: 30px;
+    cursor: pointer;
+}
+@keyframes treme {
+    0% {margin: 0;}
+    25% {margin: 10px;}
+    50% {margin: 0;}
+    75% {margin: -10px;}
+    100% {margin: 0;}
+}
+.span-whats {
+    background-color: #55a576;
+}
+.span-clickup {
+    background-color: #7b68ee;
+}
+.span-clickup:hover {
+    color: #7b68ee !important;
+    border-color: #7b68ee;
+}
+.span-whats:hover {
+    color: #55a576 !important;
+    border-color: #55a576;
+}
+.c-images {
+    overflow-y: hidden;
+    overflow-x: hidden;
+}
+.img-whatsapp {
+    animation: whatsapp 15s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+    position: relative;
+}
+.footer {
+    color: #777;
+}
+.footer div:nth-child(1) span {
+    font-family: italic;
+}
+.footer div:nth-child(1) span span {
+    font-size: 0.8rem !important;
+}
+@keyframes whatsapp {
+    0% { left: 0px;}
+    50% { left: 45%; transform: rotate(360deg);}
+    100% { left: 0px; transform: rotate(0deg);}
+}
+.img-clickup {
+    animation: clickup 15s;
+    animation-iteration-count: infinite;
+    animation-fill-mode: both;
+    transition-timing-function: cubic-bezier(0.4, 0.0, 0.2, 1);
+    position: relative;
+}
+@keyframes clickup {
+    0% { right: 0px;}
+    50% { right: 45%; transform: rotate(360deg);}
+    100% { right: 0px; transform: rotate(0deg);}
+}
+@media screen and (max-width: 720px) {
+    .img-whatsapp > img, .img-clickup > img {
+        width: 80px;
+        height: 80px;
+    }
+}

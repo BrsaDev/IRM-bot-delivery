@@ -1,0 +1,18 @@
+
+ ---> [ DATA ]  02/09/2022 10:56:19
+ ---> [ ERRO ]  TypeError: Cannot read properties of undefined (reading 'comment')
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-leads-clickup\index.js:140:32)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5) 
+
+-----------------------------------------------------------------------------------
+\Bruno\Documents\Grupo Avenue\Whatsapp-leads-clickup\index.js:140:32)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5) 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  21/11/2022 11:23:05
+ ---> [ ERRO ]  TypeError: Cannot read properties of undefined (reading 'comment')
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-leads-clickup\index.js:152:31)
+    at processTicksAndRejections (node:internal/process/task_queues:96:5) 
+
+-----------------------------------------------------------------------------------

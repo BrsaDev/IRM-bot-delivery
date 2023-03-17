@@ -1,0 +1,28 @@
+body {
+    min-height: 100vh;
+    font-family: calibri;
+    background-color: #f0f2f5;
+}
+.body {
+    background-image: radial-gradient(at top right, #fff 60%, #f0f2f5 30%);
+}
+#boas-vindas span:nth-child(1) {
+    font-size: 0.8rem;
+}
+#boas-vindas span:nth-child(2) {
+    font-size: 0.7rem;
+}
+.i-menu:hover {
+    background-color: #7b68ee;
+    color: #fff !important;
+    border-color: #7b68ee !important;
+}
+a {
+    text-decoration: none;
+}
+.main {
+    height: 86vh;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
