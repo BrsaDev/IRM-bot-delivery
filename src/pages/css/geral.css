@@ -21,7 +21,7 @@ a {
     text-decoration: none;
 }
 .main {
-    height: 86vh;
+    min-height: 86vh;
 }
 .cursor-pointer {
     cursor: pointer;

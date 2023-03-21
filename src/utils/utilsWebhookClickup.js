@@ -12,8 +12,7 @@ const { createLogErroWhatsapp } = require('./logs')
 
 
 module.exports = {
-    receiverWebhookClickup: async (client, body, idCliente) => {
-        let body = req.body
+    receiverWebhookClickup: async (client, body, idCliente, res, config) => {
         //  console.log(body.history_items[0].comment.comment)//(body.history_items[0].comment.comment)
         try {
             if (typeof body.history_items[0].comment == 'undefined' || typeof body.history_items[0].comment.comment == 'undefined') return true
@@ -31,15 +30,15 @@ module.exports = {
                     if (numeroPedido != "") {
                         let pedido = await listarPedido(numeroPedido)
                         if (pedido.status == 'Pedido não localizado' || pedido.status == 'Pedido não localizado') {
-                            await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                            await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
                             await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
                             return true
                         }
-                        await Tiny.incluirMarcadorPedido(pedido.loja, pedido.id_pedido)
-                        await Tiny.atualizarStatusPedido(pedido.loja, pedido.id_pedido)
+                        await Tiny.incluirMarcadorPedido(pedido.loja, pedido.id_pedido, config)
+                        await Tiny.atualizarStatusPedido(pedido.loja, pedido.id_pedido, config)
                         return true
                     } else {
-                        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
                         return true// res.status(200).json({ retorno: { status: 'ERRO' } })
                     }
                 } else if (atualizaInfoTask.length > 0) {
@@ -50,24 +49,24 @@ module.exports = {
                         if (numeroPedido != "") {
                             let pedido = await listarPedido(numeroPedido)
                             if (pedido.status == 'Pedido não localizado' || pedido.status == 'Pedido não localizado') {
-                                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
                                 await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
                                 return true// res.status(200).json({ retorno: { status: 'ERRO' } })
                             }
                             await escreverPedidoEmTask(body.task_id, pedido)
                             return true// res.status(200).json({ retorno: { status: 'OK' } })
                         } else {
-                            await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                            await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
                             return true// res.status(200).json({ retorno: { status: 'ERRO' } })
                         }
                     } catch (erro) {
-                        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
                         return false// res.status(200).json({ retorno: { status: 'ERRO' } })
                     }
                 } else if (msgLiberadaComUser.length == 0 || msgLiberadaSemUser.length > 0) {
                     let task = tarefaAtiva(body.task_id)
                     if (!task) {
-                        let responseFields = await getCamposExtraTarefa(body.task_id)
+                        let responseFields = await getCamposExtraTarefa(body.task_id, config)
                         //  console.log(responseFields)
                         if (responseFields.erro) {
                             createLogErroWhatsapp('whatsapp', responseFields.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
@@ -92,27 +91,27 @@ module.exports = {
                                     let commentId = body.history_items[0].comment.id
                                     for (var comment of body.history_items[0].comment.comment) {
                                         if (typeof comment.type != 'undefined' && comment.type == "attachment") {
-                                            let result = await getAttachmentsTarefa(body.task_id)
+                                            let result = await getAttachmentsTarefa(body.task_id, config)
                                             if (result.erro) {
                                                 createLogErroWhatsapp('whatsapp', result.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
                                                 await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
-                                                await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                                await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                             } else {
                                                 let attachment = result.filter(attachment => attachment.title == comment.text)
                                                 //  console.log(attachment)
                                                 if (attachment.length == 0) {
                                                     await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
-                                                    await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                                    await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                                 } else {
                                                     baixarArquivoPorUrl(attachment[0].url, comment.text)
-                                                    let pathArquivo = `./src/attachments/recebidos/${comment.text}`
+                                                    let pathArquivo = `./attachments/recebidos/${comment.text}`
                                                     //												await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                                     let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
                                                     addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
                                                     addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
                                                     addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, idCliente)
                                                     deletarArquivo(pathArquivo)
-                                                    await removeTagTarefa(body.task_id)
+                                                    await removeTagTarefa(body.task_id, config)
                                                     // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
                                                     let msgs = getCommentsTarefa(body.task_id, idCliente)
                                                     for (var msg of Object.entries(msgs)) {
@@ -133,7 +132,7 @@ module.exports = {
                                     addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
                                     addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
                                     addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, idCliente)
-                                    await removeTagTarefa(body.task_id)
+                                    await removeTagTarefa(body.task_id, config)
                                     // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
                                     let msgs = getCommentsTarefa(body.task_id, idCliente)
                                     for (var msg of Object.entries(msgs)) {
@@ -143,13 +142,13 @@ module.exports = {
 
                                     //    if ( telefoneClienteCadastradoNaTarefa.length < telefoneCliente.replace('@c.us','').length ) await enviarMensagem(body.task_id, "*** ATENÇÃO ***\nPrecisa inserir o nono dígito no numero cadastrado nesta tarefa.")
                                 } else {
-                                    await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.", "Integração:\n")
+                                    await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.", config, "Integração:\n")
 
                                     await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.\n*Tarefa:* ${body.task_id}`)
                                 }
                             } else {
                                 // await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `SeParece que não temos o campo Whatsapp para enviar msg para o cliente com a tarefa:\n${body.task_id}`)
-                                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO campo WhatsApp está vazio\nPara enviar mensagem interna, inicie a mensagem com ==", "Integração:\n")
+                                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO campo WhatsApp está vazio\nPara enviar mensagem interna, inicie a mensagem com ==", config, "Integração:\n")
                             }
                         }
                     } else {
@@ -160,27 +159,27 @@ module.exports = {
                         let commentId = body.history_items[0].comment.id
                         for (var comment of body.history_items[0].comment.comment) {
                             if (typeof comment.type != 'undefined' && comment.type == "attachment") {
-                                let result = await getAttachmentsTarefa(body.task_id)
+                                let result = await getAttachmentsTarefa(body.task_id, config)
                                 if (result.erro) {
                                     createLogErroWhatsapp('whatsapp', result.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
                                     await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
-                                    await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                    await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                 } else {
                                     let attachment = result.filter(attachment => attachment.title == comment.text)
                                     // console.log(attachment)
                                     if (attachment.length == 0) {
                                         await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
-                                        await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                        await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                     } else {
                                         baixarArquivoPorUrl(attachment[0].url, comment.text)
-                                        let pathArquivo = `./src/attachments/recebidos/${comment.text}`
+                                        let pathArquivo = `./attachments/recebidos/${comment.text}`
                                         //									await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                         let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
                                         addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
                                         addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
                                         addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, idCliente)
                                         deletarArquivo(pathArquivo)
-                                        await removeTagTarefa(body.task_id)
+                                        await removeTagTarefa(body.task_id, config)
                                         // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
                                         let msgs = getCommentsTarefa(body.task_id, idCliente)
                                         for (var msg of Object.entries(msgs)) {
@@ -201,7 +200,7 @@ module.exports = {
                         addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
                         addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
                         addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, idCliente)
-                        await removeTagTarefa(body.task_id)
+                        await removeTagTarefa(body.task_id, config)
                         // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
                         let msgs = getCommentsTarefa(body.task_id, idCliente)
                         for (var msg of Object.entries(msgs)) {
@@ -214,20 +213,20 @@ module.exports = {
         } catch (erro) {
             try {
                 createLogErroWhatsapp('whatsapp', erro, { taskId: body.task_id, comment: body.history_items[0].comment })
-                let resultWebhook = await getStatusWebhook()
-                if (resultWebhook.status != "active") await atualizarWebhook(resultWebhook)
+                let resultWebhook = await getStatusWebhook(config)
+                if (resultWebhook.status != "active") await atualizarWebhook(resultWebhook, config)
                 client.destroy()
                 client.initialize()
                 console.log(erro, "=>", dataHotaAtual())
                 await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem\n*MENSAGEM DE ERRO:* \n${erro}`)
-                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem. Tente novamente e se o erro persistir, notifique o Administrador.(Exception 1)", "Integração:\n")
+                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem. Tente novamente e se o erro persistir, notifique o Administrador.(Exception 1)", config, "Integração:\n")
                 return res.status(200).json({ retorno: { status: 'ERRO' } })
             } catch (erro) {
                 createLogErroWhatsapp('whatsapp', erro, { taskId: body.task_id, comment: body.history_items[0].comment })
-                let resultWebhook = await getStatusWebhook()
-                if (resultWebhook.status != "active") await atualizarWebhook(resultWebhook)
+                let resultWebhook = await getStatusWebhook(config)
+                if (resultWebhook.status != "active") await atualizarWebhook(resultWebhook, config)
                 console.log(erro, "=>", dataHotaAtual())
-                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem. Tente novamente e se o erro persistir, notifique o Administrador.(Exception 2)", "Integração:\n")
+                await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem. Tente novamente e se o erro persistir, notifique o Administrador.(Exception 2)", config, "Integração:\n")
                 return res.status(200).json({ retorno: { status: 'ERRO' } })
             }
         }

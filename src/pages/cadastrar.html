@@ -23,30 +23,44 @@
             <a id="btn-logout" href="/home" class="d-none col-3 col-lg-1 col-md-2 col-sm-2 shadow-sm i-menu btn border-success text-success fw-bold">Logout</a>
         </div>
         <div class="main d-flex justify-content-center align-items-center">
-            <div class="row col-lg-4 col-9">
-                <div class="col col-12 align-self-start">
-                    <form class="form card card-body shadow-lg">
-                        <div class="mb-3">
-                            <label class="form-label">Nome</label>
-                            <input name="nome" type="nome" class="form-control" id="nome">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Telefone</label>
-                            <input name="telefone" type="telefone" class="form-control" id="telefone">
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Email</label>
-                            <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
-                        </div>
-                        <div class="mb-3">
-                            <label class="col-sm-2 col-form-label">Senha</label>
-                            <input name="pass" type="password" class="form-control" id="pass">
-                        </div>
-                        <div class="mb-3 d-grid">
-                            <button id="salvar" type="submit" class="btn btn-primary">Cadastrar<img id="load" class="d-none ms-2" width="23" height="23" src="https://thumbs.gfycat.com/DarkFlamboyantGecko-max-1mb.gif" alt="gif-load"></button>
-                        </div>
-                    </form>
-                </div>
+            <div class="row col-lg-6 col-9">
+                <form class="row g-3 rounded shadow-lg">
+                    <div class="col-md-6">
+                        <label class="form-label">Nome</label>
+                        <input name="nome" type="nome" class="form-control" id="nome">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Telefone</label>
+                        <input name="telefone" type="telefone" class="form-control" id="telefone">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input name="email" type="email" class="form-control" id="email" placeholder="name@example.com">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Senha</label>
+                        <input name="pass" type="password" class="form-control" id="pass">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Token Click-Up</label>
+                        <input name="token" type="text" class="form-control" id="token">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Id lista click-up</label>
+                        <input name="id-lista" type="text" class="form-control" id="id-lista">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Id team click-up</label>
+                        <input name="id-team" type="text" class="form-control" id="id-team">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Id tarefa notificação</label>
+                        <input name="id-tarefa" type="text" class="form-control" id="id-tarefa">
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button id="salvar" type="submit" class="btn btn-primary">Cadastrar<img id="load" class="d-none ms-2" width="23" height="23" src="https://thumbs.gfycat.com/DarkFlamboyantGecko-max-1mb.gif" alt="gif-load"></button>
+                    </div>
+                </form>
             </div>
         </div>        
     </div>
@@ -61,14 +75,24 @@
             let telefone = document.querySelector('#telefone')
             let email = document.querySelector('#email')
             let pass = document.querySelector('#pass')
+            let token = document.querySelector('#token')
+            let idLista = document.querySelector('#id-lista')
+            let idTeam = document.querySelector('#id-team')
+            let idTarefa = document.querySelector('#id-tarefa')
             let tipo = "cadastrar"
-            if ( email.value == "" || pass.value == "" || nome.value == "" ) setRota('/erro?tipo=cadastrar')
+            for ( item of [ nome, telefone, email, pass, token, idLista, idTeam, idTarefa ] ) {
+                if ( item.value == "" ) setRota('/erro?tipo=cadastrar')
+            }
+            
             load.classList.remove('d-none')
             load.classList.add('d-inline')
             let options = {
                 method: "post",
                 url: "http://localhost:3000/acessar",
-                data: { email: email.value, pass: pass.value, nome: nome.value, telefone: telefone.value, tipo },
+                data: { 
+                    email: email.value, pass: pass.value, nome: nome.value, telefone: telefone.value, 
+                    token: token.value, idLista: idLista.value, idTeam: idTeam.value, idTarefa: idTarefa.value, tipo 
+                },
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
             }

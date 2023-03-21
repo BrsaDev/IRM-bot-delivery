@@ -6,16 +6,16 @@ const { createLogErroWhatsapp } = require('./logs')
 var clienteTemp = {}
 
 module.exports = {
-    sendMessage: async () => {
+    sendMessage: async (client, msg, config) => {
         if (msg.from == "status@broadcast" || msg.type == "e2e_notification" || msg.type == "protocol") return true
         if (msg.body == "status webhook") {
-            let resultWebhook = await getStatusWebhook()
+            let resultWebhook = await getStatusWebhook(config)
             await msg.reply(`*id:* ${resultWebhook.id}\n*status:* ${resultWebhook.status}`)
             return true
         }
         if (msg.body == "ativar webhook") {
-            let resultWebhook = await getStatusWebhook()
-            let resultAtualizarWebhook = await atualizarWebhook(resultWebhook)
+            let resultWebhook = await getStatusWebhook(config)
+            let resultAtualizarWebhook = await atualizarWebhook(resultWebhook, config)
             await msg.reply(`*id:* ${resultAtualizarWebhook.webhook.id}\n*status:*${resultAtualizarWebhook.webhook.health.status}`)
             return true
         }
@@ -25,17 +25,17 @@ module.exports = {
 
         if (!cliente && typeof clienteTemp[msg.from] == 'undefined') {
             clienteTemp[msg.from] = true
-            let newTask = await criarTarefa(process.env.ID_LISTA_CLIENTES, msg.from.toString().slice(2, -5) + "-" + nomeCliente, `Detalhes da solicitação do cliente: `, msg.from.toString().slice(2, -5))
+            let newTask = await criarTarefa(config, msg.from.toString().slice(2, -5) + "-" + nomeCliente, `Detalhes da solicitação do cliente: `)
             if (newTask.erro) {
 
-                await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞Erro ao criar nova tarefa no ClickUp😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
+                await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞Erro ao criar nova tarefa no ClickUp😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
                 if (msg.hasMedia) {
                     const attachmentData = await msg.downloadMedia();
                     createLogErroWhatsapp('whatsapp', newTask.erro, { cliente: msg.from, msg: "Msg foi um arquivo enviado" })
-                    await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
+                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
                 } else {
                     createLogErroWhatsapp('whatsapp', newTask.erro, { cliente: msg.from, msg: msg.body })
-                    await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, msg.body)
+                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, msg.body)
                 }
                 return false
             }
@@ -54,9 +54,9 @@ module.exports = {
         }
 
         if (msg.type == "call_log") {
-            let resultCall = await enviarMensagem(cliente.taskId, "Chamada de voz perdida às: " + dataHotaAtualSimples())
+            let resultCall = await enviarMensagem(cliente.taskId, "Chamada de voz perdida às: " + dataHotaAtualSimples(), config)
             if (resultCall.erro) {
-                await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar notificação de chamada perdida do WhatsApp para o ClickUp_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nChamada perdida às: ${dataHotaAtualSimples()}`)
+                await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar notificação de chamada perdida do WhatsApp para o ClickUp_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nChamada perdida às: ${dataHotaAtualSimples()}`)
             }
             return false
         }
@@ -74,32 +74,32 @@ module.exports = {
             fs.writeFile(pathArquivo, Buffer.from(attachmentData.data, 'base64'), async (err) => {
                 if (err) {
                     createLogErroWhatsapp('whatsapp', err, { cliente: msg.from, msg: "Msg foi arquivo" })
-                    await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar mensagem do WhatsApp para o ClickUp.\n VERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
-                    await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
+                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar mensagem do WhatsApp para o ClickUp.\n VERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
+                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
                 } else {
-                    let result = await postAttachmentTarefa(cliente.taskId, pathArquivo)
+                    let result = await postAttachmentTarefa(cliente.taskId, pathArquivo, config)
                     if (result.erro) {
                         createLogErroWhatsapp('whatsapp', result.erro, { cliente: msg.from, msg: "Msg foi arquivo" })
-                        await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar arquivo do WhatsApp para o ClickUp.\nVERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nArquivo enviado pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
-                        await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
+                        await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar arquivo do WhatsApp para o ClickUp.\nVERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nArquivo enviado pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
+                        await client.sendMessage(config.TELEFONE_NOTIFICACAO, attachmentData, { sendAudioAsVoice: true })
                         return false
                     }
                     if (msg.type == "image" && msg.body != "") {
-                        await enviarMensagem(cliente.taskId, msg.body)
+                        await enviarMensagem(cliente.taskId, msg.body, config)
                     }
-                    await addTagTarefa(cliente.taskId)
+                    await addTagTarefa(cliente.taskId, config)
                     deletarArquivo(pathArquivo)
                     return true
                 }
             })
         } else {
-            let result = await enviarMensagem(cliente.taskId, msg.body, (nomeCliente + '\n'))
+            let result = await enviarMensagem(cliente.taskId, msg.body, config, (nomeCliente + '\n'))
             if (result.erro) {
                 createLogErroWhatsapp('whatsapp', result.erro, { cliente: msg.from, msg: msg.body })
-                await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar mensagem do WhatsApp para o ClickUp.\nVERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
-                await client.sendMessage(process.env.TELEFONE_NOTIFICACAO, msg.body)
+                await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\n😞_Erro ao enviar mensagem do WhatsApp para o ClickUp.\nVERIFICAR SERVIDOR WHATSAPP_😞\n*${msg.from.slice(2).replace('@c.us', '')}*\nMSG enviada pelo remetente no WhatsApp\n👇👇👇👇👇👇👇`)
+                await client.sendMessage(config.TELEFONE_NOTIFICACAO, msg.body)
             }
-            await addTagTarefa(cliente.taskId)
+            await addTagTarefa(cliente.taskId, config)
             return true
         }
     }

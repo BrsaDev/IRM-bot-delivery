@@ -1,17 +1,18 @@
 const axios = require("axios");
 const fs = require('fs');
 const FormData = require('form-data');
+const BASE_URL = "https://api.clickup.com/api/v2"
 
 module.exports = {
     criarTarefa: async (config, nome, descricao) => {
         try {
             let options = {
                 method: "post",
-                url: `${config.BASE_URL}/list/${config.ID_LISTA_CLIENTES}/task`,
+                url: `${ BASE_URL }/list/${config.ID_LISTA_CLIENTES}/task`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
-                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true, custom_fields: [{ id: "c54130d2-9cd3-419b-a19c-2399511cb21c", value: telefone }] }
+                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true }
             }
             let response = await axios(options)
             console.log('tarefa criada...')
@@ -27,7 +28,7 @@ module.exports = {
             let body = !user ? { comment_text: msg, notify_all: true } : { comment: [{ text: user, attributes: { bold: true } }, { text: msg }] }
             let options = {
                 method: "post",
-                url: `${config.BASE_URL}/task/${taskId}/comment`,
+                url: `${ BASE_URL }/task/${taskId}/comment`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -45,7 +46,7 @@ module.exports = {
         try {
             let options = {
                 method: "put",
-                url: `${config.BASE_URL}/comment/${commentId}`,
+                url: `${ BASE_URL }/comment/${commentId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -61,7 +62,7 @@ module.exports = {
         try {
             let options = {
                 method: "put",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -77,7 +78,7 @@ module.exports = {
         try {
             let options = {
                 method: "post",
-                url: `${config.BASE_URL}/task/${taskId}/field/${fieldId}/?custom_task_ids=true`,
+                url: `${ BASE_URL }/task/${taskId}/field/${fieldId}/?custom_task_ids=true`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -93,7 +94,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/list/${config.ID_LISTA_CLIENTES}/comment`,
+                url: `${ BASE_URL }/list/${config.ID_LISTA_CLIENTES}/comment`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -110,7 +111,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/task/${taskId}/comment`,
+                url: `${ BASE_URL }/task/${taskId}/comment`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -127,7 +128,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -144,7 +145,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -161,7 +162,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/list/${config.ID_LISTA_CLIENTES}/task`,
+                url: `${ BASE_URL }/list/${config.ID_LISTA_CLIENTES}/task`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -178,7 +179,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -195,7 +196,7 @@ module.exports = {
             tarefa.status = newStatus
             let options = {
                 method: "put",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -211,7 +212,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/task/${taskId}`,
+                url: `${ BASE_URL }/task/${taskId}`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -230,7 +231,7 @@ module.exports = {
             formData.append('attachment', fs.createReadStream(pathArquivo))
             let options = {
                 method: "post",
-                url: `${config.BASE_URL}/task/${taskId}/attachment`,
+                url: `${ BASE_URL }/task/${taskId}/attachment`,
                 headers: {
                     "Authorization": config.TOKEN,
                     "Content-Type": "multipart/form-data"
@@ -250,7 +251,7 @@ module.exports = {
         try {
             let options = {
                 method: "post",
-                url: `${config.BASE_URL}/task/${taskId}/tag/nova mensagem`,
+                url: `${ BASE_URL }/task/${taskId}/tag/nova mensagem`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -267,7 +268,7 @@ module.exports = {
         try {
             let options = {
                 method: "delete",
-                url: `${config.BASE_URL}/task/${taskId}/tag/nova mensagem`,
+                url: `${ BASE_URL }/task/${taskId}/tag/nova mensagem`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -284,7 +285,7 @@ module.exports = {
         try {
             let options = {
                 method: "get",
-                url: `${config.BASE_URL}/team/${config.ID_TEAM_CLICKUP}/webhook`,
+                url: `${ BASE_URL }/team/${config.ID_TEAM_CLICKUP}/webhook`,
                 headers: {
                     "Authorization": config.TOKEN
                 }
@@ -301,7 +302,7 @@ module.exports = {
         try {
             let options = {
                 method: "put",
-                url: `${config.BASE_URL}/webhook/${dadosAtualizacao.id}`,
+                url: `${ BASE_URL }/webhook/${dadosAtualizacao.id}`,
                 headers: {
                     "Authorization": config.TOKEN
                 },
@@ -320,7 +321,7 @@ module.exports = {
         }
     },
     Tiny: {
-        atualizarStatusPedido: async (loja, idPedido, config) => {
+        atualizarStatusPedido: async (loja, idPedido) => {
             try {
                 const token = {
                     "AP": config.TOKEN_AP,
@@ -338,7 +339,7 @@ module.exports = {
                 return { erro: err }
             }
         },
-        incluirMarcadorPedido: async (loja, idPedido, config) => {
+        incluirMarcadorPedido: async (loja, idPedido) => {
             try {
                 const token = {
                     "AP": config.TOKEN_AP,

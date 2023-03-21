@@ -54,8 +54,9 @@ const session = async function (idCliente) {
     });
     
     client.on(`message`, async msg => {
-        console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n')
-        // await sendMessage(client, msg)
+        let configCliente = configGetCliente(msg.to.replace('@c.us', '')) 
+        console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n', configCliente)
+        // await sendMessage(client, msg, configCliente)
     });
 
     return client;

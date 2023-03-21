@@ -1,14 +1,15 @@
 const express = require('express');
 const { resetClientesConfigSet } = require("./utils/utils");
 const { raiz, home, login, qr, qrcode, cadastrar, erro } = require('./routes/get')
-const { initSession, closeSession, resetSenha, acessar } = require('./routes/post')
+const { initSession, closeSession, resetSenha, acessar, message } = require('./routes/post')
 
+let port = process.env.PORT || 3000
 const app = express()
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(express.static('pages'))
 
-var conexaoClientes = {}
+let { conexaoClientes } = require('./model/conexaoClienteCache')
 
 // rotas get 
 app.get('/', raiz)
@@ -24,8 +25,9 @@ app.post('/iniciar-sessao', initSession)
 app.post('/fechar-sessao', closeSession)
 app.post('/reset-senha', resetSenha)
 app.post('/acessar', acessar)
+app.post('/message', message)
 
-app.listen(3000, ()=> { console.log('running app') })
+app.listen(port, ()=> { console.log('running app') })
 
 
 process.on('SIGINT', (e) => {console.log(e); process.exit()})

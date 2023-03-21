@@ -1,11 +1,22 @@
 const axios = require('axios')
-const { gerarIdCliente, clienteConfigSet } = require("../utils/utils")
+const { clienteConfigSet, setConfigClickup } = require("../utils/utils")
+const { receiverWebhookClickup } = require("../utils/utilsWebhookClickup")
 const session = require('../whatsapp')
+let { conexaoClientes } = require('../model/conexaoClienteCache')
+const fs = require('fs')
+const path  = require('path')
 
 
 const baseUrlApiGoogle = "https://script.google.com/macros/s/AKfycbyRhhah_kW0xmzpkSaV_5gxwZkmCIwt7cHAqR9nIbVGIEEjkwi8JVLUaRD1XwyQ0k0mbw/exec"
 
 module.exports = {
+    message: (req, res) => {
+        let { idCliente } = req.query
+        if ( req.originalUrl == '/message' ) idCliente = "numero alexandre"
+        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
+        receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
+        return true
+    },
     initSession: (req, res) => {
         let { idCliente } = req.body
         conexaoClientes[idCliente] = session(idCliente)
@@ -30,11 +41,12 @@ module.exports = {
         return res.json({ status: response.data.status })
     },
     acessar: async (req, res) => {
-        let { email, pass, nome, telefone, tipo } = req.body
+        let { email, pass, nome, telefone, token, idLista, idTeam, idTarefa, tipo } = req.body
         if ( email == "" || pass == "" ) return res.redirect('/erro?tipo=' + tipo)
         let urlFinal = `?tipo=${ tipo }&user=${ email }&senha=${ pass }`
         if ( tipo == "cadastrar" ) { 
-            let newIdCliente = gerarIdCliente()
+            setConfigClickup(telefone, token, idLista, idTeam, idTarefa)
+            let newIdCliente = "excluir"
             urlFinal = `?tipo=${ tipo }&user=${ email }&senha=${ pass }&nome=${ nome }&telefone=${ telefone }&idCliente=${ newIdCliente }`
         }
         let options = {
@@ -56,3 +68,5 @@ module.exports = {
         // }
     }
 }
+
+function absolutePath() { return __dirname.replace('\\routes', '').replace('/routes', '') }

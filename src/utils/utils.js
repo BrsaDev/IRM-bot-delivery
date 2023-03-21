@@ -95,7 +95,7 @@ module.exports = {
     baixarArquivoPorUrl: async function(uri, filename){
         const cp = require('child_process');
         // let command = `curl -o .\\src\\attachments\\recebidos\\"${filename}" ${uri}`;
-		let command = `curl -o ./src/attachments/recebidos/"${ filename }" ${uri}`;
+		let command = `curl -o ./attachments/recebidos/"${ filename }" ${uri}`;
         let result = cp.execSync(command);
         console.log(result)
         return true
@@ -164,6 +164,29 @@ module.exports = {
         fs.writeFileSync(__dirname + '/../model/config.json', JSON.stringify(config))
         return true
     },
+    setConfigClickup: (idCliente, token, idLista, idTeam, idTarefa) => {
+        let config = JSON.parse(fs.readFileSync(__dirname + '/../model/config.json'))
+        if ( typeof config[idCliente] != 'undefined' ) {
+            config[idCliente]['TOKEN'] = token
+            config[idCliente]['ID_LISTA_CLIENTES'] = idLista
+            config[idCliente]['ID_TEAM_CLICKUP'] = idTeam
+            config[idCliente]['TAREFA_MASTER'] = idTarefa
+        }else {
+            config[idCliente] = {}
+            config[idCliente]["nome_qrcode"] = "",
+            config[idCliente]["autenticado"] = false,
+            config[idCliente]["inicializado"] = false,
+            config[idCliente]["falha"] = false,
+            config[idCliente]["BASE_URL"] = "https://api.clickup.com/api/v2",
+            config[idCliente]['TOKEN'] = token
+            config[idCliente]['MODEL_LOCAL'] = `./src/model/${ idCliente }.json`
+            config[idCliente]['ID_LISTA_CLIENTES'] = idLista
+            config[idCliente]['ID_TEAM_CLICKUP'] = idTeam
+            config[idCliente]['TELEFONE_NOTIFICACAO'] = idCliente + "@c.us"
+            config[idCliente]['TAREFA_MASTER'] = idTarefa
+        }
+        fs.writeFileSync(__dirname + '/../model/config.json', JSON.stringify(config))
+    },
     configGetCliente: (idCliente) => {
         let config = JSON.parse(fs.readFileSync(__dirname + '/../model/config.json'))
         return config[idCliente] || false
@@ -173,15 +196,9 @@ module.exports = {
         if ( fs.existsSync(path)) { fs.unlinkSync(path); return true }
         else return false
     },
-    gerarIdCliente: () => {
-        const id = crypto.randomBytes(16).toString("hex")
-        console.log(id)
-        return id
-    },
     sleep: function(milliseconds) {
         return new Promise(resolve => setTimeout(resolve, milliseconds))
-    },
-    
+    }
     // deletarArquivo: async function(path){
     //     const cp = require('child_process');
     //     let command = `del ${path.replace('/', '\\').replace('/', '\\').replace('/', '\\').replace('/', '\\')}`;
