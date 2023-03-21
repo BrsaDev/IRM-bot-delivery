@@ -321,7 +321,7 @@ module.exports = {
         }
     },
     Tiny: {
-        atualizarStatusPedido: async (loja, idPedido) => {
+        atualizarStatusPedido: async (loja, idPedido, config) => {
             try {
                 const token = {
                     "AP": config.TOKEN_AP,
@@ -339,7 +339,7 @@ module.exports = {
                 return { erro: err }
             }
         },
-        incluirMarcadorPedido: async (loja, idPedido) => {
+        incluirMarcadorPedido: async (loja, idPedido, config) => {
             try {
                 const token = {
                     "AP": config.TOKEN_AP,

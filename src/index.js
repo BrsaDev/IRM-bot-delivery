@@ -27,13 +27,15 @@ app.post('/reset-senha', resetSenha)
 app.post('/acessar', acessar)
 app.post('/message', message)
 
-app.listen(port, ()=> { console.log('running app') })
+app.listen(port, ()=> { console.log('Rodando as rotas na porta: ' + port) })
 
 
 process.on('SIGINT', (e) => {console.log(e); process.exit()})
 process.on('SIGQUIT', (e) => {console.log(e); process.exit()})
 process.on('SIGTERM', (e) => {console.log(e); process.exit()})
 process.on('exit', (code) => {
-    resetClientesConfigSet(Object.keys(conexaoClientes), { tipo1: "inicializado", tipo2: "autenticado", value: false })
+    if ( Object.keys(conexaoClientes).length > 0 ) {
+       resetClientesConfigSet(Object.keys(conexaoClientes), { tipo1: "inicializado", tipo2: "autenticado", value: false }) 
+    }    
     console.log('Fechando o processo com o código: ', code);
 });

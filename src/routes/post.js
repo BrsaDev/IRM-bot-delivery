@@ -57,15 +57,6 @@ module.exports = {
         let response = await axios(options)
         if ( response.erro ) return res.redirect('/erro?tipo=' + tipo)
         return res.json(response.data)        
-        // if ( tipo == "cadastrar" ) return res.json(response.data)
-        // else {
-        //     let configCliente = configGetCliente(response.data.idCliente)
-        //     if ( response.data.autorizado && !configCliente.inicializado ) {
-        //         conexaoClientes[response.data.idCliente] = session(response.data.idCliente)
-        //         return res.json(response.data)
-        //     }
-        //     if ( configCliente.inicializado ) return res.json(response.data)
-        // }
     }
 }
 
