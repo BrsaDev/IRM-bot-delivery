@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 {"2298159627":{"nome_qrcode":"","autenticado":false,"inicializado":false,"falha":false,"BASE_URL":"https://api.clickup.com/api/v2","TOKEN":"111","MODEL_LOCAL":"./src/model/2298159627.json","ID_LISTA_CLIENTES":"222","ID_TEAM_CLICKUP":"333","TELEFONE_NOTIFICACAO":"2298159627@c.us","TAREFA_MASTER":"1q2q"}}
+=======
+{}
+>>>>>>> 8ba7b142db53f133a6dc5739ee5616116a815256
