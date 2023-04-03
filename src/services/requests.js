@@ -4,7 +4,7 @@ const FormData = require('form-data');
 const BASE_URL = "https://api.clickup.com/api/v2"
 
 module.exports = {
-    criarTarefa: async (config, nome, descricao) => {
+    criarTarefa: async (config, nome, descricao, telefone) => {
         try {
             let options = {
                 method: "post",
@@ -12,7 +12,7 @@ module.exports = {
                 headers: {
                     "Authorization": config.TOKEN
                 },
-                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true }
+                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true, custom_fields: [{ id: "c54130d2-9cd3-419b-a19c-2399511cb21c", value: telefone }]  }
             }
             let response = await axios(options)
             console.log('tarefa criada...')

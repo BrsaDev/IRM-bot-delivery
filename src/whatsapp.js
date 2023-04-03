@@ -52,14 +52,20 @@ const session = async function (idCliente) {
         client.initialize();
         clienteConfigSet(idCliente, { tipo: "autenticado", value: false })
     });
+
+    client.on('message_ack', async (msg, ack) => {
+        let configCliente = configGetCliente(msg.to.replace('@c.us', ''))
+        await confirmaMessage(msg, ack, configCliente)
+    })
     
     client.on(`message`, async msg => {
         let configCliente = configGetCliente(msg.to.replace('@c.us', '')) 
         console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n', configCliente)
-        // await sendMessage(client, msg, configCliente)
+        await sendMessage(client, msg, configCliente)
     });
 
     return client;
 };
+
 
 module.exports = session

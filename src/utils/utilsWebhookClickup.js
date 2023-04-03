@@ -9,6 +9,7 @@ const {
 } = require("./utils.js");
 const { tarefaAtiva, validaEnvioMensagem } = require("./validacao");
 const { createLogErroWhatsapp } = require('./logs')
+const path = require('path')
 
 
 module.exports = {
@@ -104,7 +105,7 @@ module.exports = {
                                                     await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                                 } else {
                                                     baixarArquivoPorUrl(attachment[0].url, comment.text)
-                                                    let pathArquivo = `./attachments/recebidos/${comment.text}`
+                                                    let pathArquivo = path.join(absolutePath(), `/attachments/recebidos/${comment.text}`)
                                                     //												await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                                     let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
                                                     addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
@@ -172,7 +173,7 @@ module.exports = {
                                         await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                     } else {
                                         baixarArquivoPorUrl(attachment[0].url, comment.text)
-                                        let pathArquivo = `./attachments/recebidos/${comment.text}`
+                                        let pathArquivo = path.join(absolutePath(), `/attachments/recebidos/${comment.text}`)
                                         //									await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                         let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
                                         addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
@@ -232,3 +233,5 @@ module.exports = {
         }
     }
 }
+
+function absolutePath() { return __dirname.replace('\\utils', '').replace('/utils', '') }

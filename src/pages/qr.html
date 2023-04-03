@@ -61,7 +61,7 @@
 
         iniciarSessao.addEventListener('click', async (e) => {
             e.preventDefault()
-            let response = await axios.post('http://localhost:3000/iniciar-sessao', { idCliente })
+            let response = await axios.post('http://89.117.55.232:3000/iniciar-sessao', { idCliente })
             if ( !response.erro ) {
                 cIniciarSessao.classList.add('d-none')
                 gifLoad.classList.remove('d-none')
@@ -71,7 +71,7 @@
         })
         fecharSessao.addEventListener('click', async (e) => {
             e.preventDefault()
-            let response = await axios.post('http://localhost:3000/fechar-sessao', { idCliente })
+            let response = await axios.post('http://89.117.55.232:3000/fechar-sessao', { idCliente })
             return response.data
         })
 
@@ -137,7 +137,7 @@
             }, 13000)            
         }
         async function getNomeQrcode() {
-            let nomeQrcode = await axios('http://localhost:3000/get-qrcode?idCliente=' + idCliente)
+            let nomeQrcode = await axios('http://89.117.55.232:3000/get-qrcode?idCliente=' + idCliente)
             return nomeQrcode
         }
         
