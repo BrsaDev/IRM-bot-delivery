@@ -72,7 +72,7 @@
             if ( result.data.status == "OK" ) {
                 email.value = ""
                 pass.value = ""
-                return alert('Sua senha foi enviada para o email fornecido.')
+                return alert(`Sua senha foi enviada para o email fornecido(${ email.value }).`)
             }
             return alert('O email fornecido não está cadastrado.\nVerifique se o email é o mesmo do cadastro e tente novamente.')
         })
