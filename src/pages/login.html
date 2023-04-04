@@ -50,6 +50,7 @@
     </script>
     <script src="./javascript/geral.js"></script>
     <script>
+        if ( localStorage.getItem('idCliente') ) setRota('/home')
         let load = document.querySelector('#load')
         let email = document.querySelector('#email')
         let pass = document.querySelector('#pass')
@@ -85,7 +86,7 @@
             load.classList.add('d-inline')
             let options = {
                 method: "post",
-                url: "http://http://89.117.55.232:3000/acessar",
+                url: "http://89.117.55.232:3000/acessar",
                 data: { email, pass, tipo },
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
