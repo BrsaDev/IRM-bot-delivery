@@ -7,7 +7,7 @@ let cadastrar = document.querySelector('#btn-cadastrar')
 let boasVindas = document.querySelector('#boas-vindas')
 
 
-if ( idCliente == "5522992238683" ) {
+if ( idCliente == "556239248700" ) {
     cadastrar.classList.remove('d-none')
     cadastrar.classList.add('d-block')
 }

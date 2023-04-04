@@ -64,13 +64,29 @@
     </div>
     <script src="./javascript/geral.js"></script>
     <script>
-        let btnWhatsapp = document.querySelector('#btn-whatsapp')
-        setInterval(function() {
+        window.addEventListener('load', function() {
+            let btnWhatsapp = document.querySelector('#btn-whatsapp')
+            function detectar_mobile() { 
+                if( navigator.userAgent.match(/Android/i)
+                    || navigator.userAgent.match(/webOS/i)
+                    || navigator.userAgent.match(/iPhone/i)
+                    || navigator.userAgent.match(/iPad/i)
+                    || navigator.userAgent.match(/iPod/i)
+                    || navigator.userAgent.match(/BlackBerry/i)
+                    || navigator.userAgent.match(/Windows Phone/i)
+                ){
+                    btnWhatsapp.href = "intent://send/556239248700#Intent;scheme=smsto;package=com.whatsapp;action=android.intent.action.SENDTO;end"
+                }
+            }
+            detectar_mobile()
+            setInterval(function() {
             btnWhatsapp.style.animation = "treme 0.1s"
             setTimeout(function() {
                 btnWhatsapp.style.animation = "none"
             }, 1500)
         }, 8000)
+        })
+       
     </script>
 </body>
 </html>
