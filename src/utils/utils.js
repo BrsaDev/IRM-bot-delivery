@@ -149,8 +149,8 @@ module.exports = {
         for ( let idCliente of idsCliente ) {
             config[idCliente][param.tipo1] = param.value
             config[idCliente][param.tipo2] = param.value
-            let path = path.join(absolutePath(), '/pages/assets/') + config[idCliente].nome_qrcode + '.svg'
-            if ( fs.existsSync(path) ) fs.unlinkSync(path)
+            let caminho = path.join(absolutePath(), '/pages/assets/') + config[idCliente].nome_qrcode + '.svg'
+            if ( fs.existsSync(caminho) ) fs.unlinkSync(caminho)
         }
         fs.writeFileSync(path.join(absolutePath(), '/model/config.json'), JSON.stringify(config))
         return true

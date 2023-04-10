@@ -8,7 +8,7 @@ const session = async function (idCliente) {
  
     const client = new Client({
         // restartOnAuthFail: true,
-        puppeteer: { executablePath: "/usr/bin/google-chrome-stable" },// ou esse  /opt/google/chrome LINUX
+        puppeteer: { executablePath: "/usr/bin/chromium" },
         authStrategy: new LocalAuth({
             clientId: idCliente
         })
