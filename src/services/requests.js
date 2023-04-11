@@ -12,8 +12,8 @@ module.exports = {
                 headers: {
                     "Authorization": config.TOKEN
                 },
-                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true, custom_fields: [{ id: "c54130d2-9cd3-419b-a19c-2399511cb21c", value: telefone }]  }
-            }
+                data: { name: nome, description: descricao, tags: ["nova mensagem"], "check_required_custom_fields": true, custom_fields: [{ id: "7810cc42-ad7f-4e81-a135-8788c51ac2d6", value: telefone }]  }
+            }                                                                                                                                    
             let response = await axios(options)
             console.log('tarefa criada...')
             //            console.log(response.data) // Trás os dados da tarefa criada

@@ -13,7 +13,7 @@ module.exports = {
     confirmMessage: async (msg, ack, config) => {
         if (ack == -1) { // ocorreu erro ao envia a mensagem
             console.log('erro no envio da mensagem')
-            let cliente = clienteAtivo(msg.to)
+            let cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -35,7 +35,7 @@ module.exports = {
             console.log('mensagem enviada, aguardando chegar ao destinatário')
         } else if (ack == 1) { // mensagem foi enviada, mas não foi baixada no dispositovo do destinatário
             console.log('mensagem entregue, mas não lida ou arquivo não baixado')
-            let cliente = clienteAtivo(msg.to)
+            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -55,7 +55,7 @@ module.exports = {
             }
         } else if (ack == 2) { // mensagem chegou ao detinatário
             console.log('mensagem entregue ao destinatário')
-            let cliente = clienteAtivo(msg.to)
+            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -76,7 +76,7 @@ module.exports = {
         }
         else if (ack == 3) { // mensagem foi lida
             console.log('mensagem lida pelo destinatário')
-            let cliente = clienteAtivo(msg.to)
+            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -85,7 +85,7 @@ module.exports = {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
                             await atualizarMensagem(messageEnviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '').replace('\n✓', '').replace('\n✓', '')}\n✓✓`, config)
-                            deleteCommentIdUser(msg.to, msg._data.id.id)
+                            deleteCommentIdUser(msg.to.replace('@c.us', '').slice(2), msg._data.id.id)
                         } else {
                             await enviarMensagem(cliente.taskId, '✓✓')
                         }
@@ -103,7 +103,7 @@ module.exports = {
     
         } else if (ack == 4) { // o arquivo de audio foi iniciado
             console.log('destinatário escutando áudio')
-            let cliente = clienteAtivo(msg.to)
+            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -112,7 +112,7 @@ module.exports = {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
                             await atualizarMensagem(messageEnviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '').replace('\n✓', '')}\n✓✓✓`, config)
-                            deleteCommentIdUser(msg.to, msg._data.id.id)
+                            deleteCommentIdUser(msg.to.replace('@c.us', '').slice(2), msg._data.id.id)
                         } else {
                             await enviarMensagem(cliente.taskId, '✓✓✓')
                         }
@@ -143,7 +143,7 @@ module.exports = {
         }
 
         let nomeCliente = (typeof msg._data.notifyName == "undefined" ? "Sem Nome" : msg._data.notifyName)
-        var cliente = clienteAtivo(msg.from)
+        var cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
 
         if (!cliente && typeof clienteTemp[msg.from] == 'undefined') {
             clienteTemp[msg.from] = true
@@ -164,13 +164,13 @@ module.exports = {
             newTask.configTask.user = msg.from
             ativarTarefa(newTask.taskId, newTask.configTask)
             ativarCliente(msg.from, newTask.taskId)
-            cliente = clienteAtivo(msg.from)
+            cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
         } else {
             await sleep(5000)
-            cliente = clienteAtivo(msg.from)
+            cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
             if (!cliente) {
                 await sleep(2000)
-                cliente = clienteAtivo(msg.from)
+                cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
             }
             if (cliente && typeof clienteTemp[msg.from] != 'undefined') delete clienteTemp[msg.from]
         }

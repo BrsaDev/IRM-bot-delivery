@@ -3,6 +3,7 @@ const qrcode = require('qrcode-terminal');
 const qrimage = require('qr-image');
 const fs = require(`fs`);
 const { clienteConfigSet, configGetCliente, deletarArquivo } = require("./utils/utils");
+const { confirmMessage, sendMessage } = require('./utils/utilsWhatsapp')
 
 const session = async function (idCliente) {
  
@@ -55,11 +56,11 @@ const session = async function (idCliente) {
 
     client.on('message_ack', async (msg, ack) => {
         let configCliente = configGetCliente(msg.to.replace('@c.us', ''))
-        await confirmaMessage(msg, ack, configCliente)
+        await confirmMessage(msg, ack, configCliente)
     })
     
     client.on(`message`, async msg => {
-        let configCliente = configGetCliente(msg.to.replace('@c.us', '')) 
+        let configCliente = configGetCliente(msg.to.replace('@c.us', '').slice(2)) 
         console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n', configCliente)
         await sendMessage(client, msg, configCliente)
     });

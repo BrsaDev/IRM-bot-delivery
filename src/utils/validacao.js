@@ -1,20 +1,21 @@
-const fs = require("fs");
+const fs = require("fs")
+const path = require('path')
 
 module.exports = {
-    tarefaAtiva: (taskId) => {
-        let registros = JSON.parse(fs.readFileSync(process.env.MODEL_LOCAL))
+    tarefaAtiva: (taskId, config, idCliente) => {
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
         return ( registros.ativo[taskId] || false )
     },
-    tarefaInativa: (taskId) => {
-        let registros = JSON.parse(fs.readFileSync(process.env.MODEL_LOCAL))
+    tarefaInativa: (taskId, config, idCliente) => {
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
         return (registros.inativo[taskId] || false)
     },
-    clienteAtivo: (telefone) => {
-        let registros = JSON.parse(fs.readFileSync(process.env.MODEL_LOCAL))
+    clienteAtivo: (telefone, config) => {
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[telefone] || false )
     },
-    validaEnvioMensagem: function(body) {
-        let registros = JSON.parse(fs.readFileSync(process.env.MODEL_LOCAL))
+    validaEnvioMensagem: function(body, config, idCliente) {
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
         if ( typeof registros.ativo[body.task_id] == 'undefined' || typeof registros.ativo[body.task_id].limpar_msg_saida == 'undefined' ) var commentAtivo = false
         else {
             var commentAtivo = ( typeof body.history_items[0].comment.id == 'undefined' ? false : (registros.ativo[body.task_id].limpar_msg_saida[body.history_items[0].comment.id] || false) )
@@ -26,3 +27,5 @@ module.exports = {
         }
     }
 }
+
+function absolutePath() { return __dirname.replace('\\utils', '').replace('/utils', '') }
