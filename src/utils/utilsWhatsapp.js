@@ -1,5 +1,5 @@
-const { 
-    enviarMensagem, criarTarefa, addTagTarefa, getStatusWebhook, 
+const {
+    enviarMensagem, criarTarefa, addTagTarefa, getStatusWebhook,
     atualizarWebhook, postAttachmentTarefa, atualizarMensagem, getMessageTarefa
 } = require("../services/requests.js");
 const { ativarTarefa, ativarCliente, deletarArquivo, sleep, dataHotaAtualSimples } = require("./utils.js");
@@ -13,12 +13,12 @@ var clienteTemp = {}
 module.exports = {
     confirmMessage: async (msg, ack, config) => {
         if (ack == -1) { // ocorreu erro ao envia a mensagem
-            console.log('erro no envio da mensagem')
-            let cliente = clienteAtivo(msg.from, config)
-            if (cliente) {
-                let messages = await getMessageTarefa(cliente.taskId, config)
-                let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
-                try {
+            try {
+                console.log('erro no envio da mensagem')
+                let cliente = clienteAtivo(msg.from, config)
+                if (cliente) {
+                    let messages = await getMessageTarefa(cliente.taskId, config)
+                    let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
                     if (typeof messageEnviada != 'undefined') {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -30,17 +30,17 @@ module.exports = {
                             await atualizarMensagem(cliente.ultima_msg_enviada, `${ultimaMessage.comment_text}\n✕`, config)
                         }
                     }
-                } catch (e) { createLogErroWhatsapp('whatsapp', e) }
-            }
+                }
+            } catch (e) { createLogErroWhatsapp('whatsapp', e) }
         } else if (ack == 0) { // aguardando chegar no destinatário
             console.log('mensagem enviada, aguardando chegar ao destinatário')
         } else if (ack == 1) { // mensagem foi enviada, mas não foi baixada no dispositovo do destinatário
-            console.log('mensagem entregue, mas não lida ou arquivo não baixado')
-            let cliente = clienteAtivo(msg.from, config)
-            if (cliente) {
-                let messages = await getMessageTarefa(cliente.taskId, config)
-                let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
-                try {
+            try {
+                console.log('mensagem entregue, mas não lida ou arquivo não baixado')
+                let cliente = clienteAtivo(msg.from, config)
+                if (cliente) {
+                    let messages = await getMessageTarefa(cliente.taskId, config)
+                    let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
                     if (typeof messageEnviada != 'undefined') {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -52,15 +52,15 @@ module.exports = {
                             await atualizarMensagem(cliente.ultima_msg_enviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '')}\n✓`, config)
                         }
                     }
-                } catch (e) { createLogErroWhatsapp('whatsapp', e) }
-            }
+                }
+            } catch (e) { createLogErroWhatsapp('whatsapp', e) }
         } else if (ack == 2) { // mensagem chegou ao detinatário
-            console.log('mensagem entregue ao destinatário')
-            let cliente = clienteAtivo(msg.from, config)
-            if (cliente) {
-                let messages = await getMessageTarefa(cliente.taskId, config)
-                let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
-                try {
+            try {
+                console.log('mensagem entregue ao destinatário')
+                let cliente = clienteAtivo(msg.from, config)
+                if (cliente) {
+                    let messages = await getMessageTarefa(cliente.taskId, config)
+                    let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
                     if (typeof messageEnviada != 'undefined') {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -72,16 +72,16 @@ module.exports = {
                             await atualizarMensagem(cliente.ultima_msg_enviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '')}\n✓`, config)
                         }
                     }
-                } catch (e) { createLogErroWhatsapp('whatsapp', e) }
-            }
+                }
+            } catch (e) { createLogErroWhatsapp('whatsapp', e) }
         }
         else if (ack == 3) { // mensagem foi lida
-            console.log('mensagem lida pelo destinatário')
-            let cliente = clienteAtivo(msg.from, config)
-            if (cliente) {
-                let messages = await getMessageTarefa(cliente.taskId, config)
-                let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
-                try {
+            try {
+                console.log('mensagem lida pelo destinatário')
+                let cliente = clienteAtivo(msg.from, config)
+                if (cliente) {
+                    let messages = await getMessageTarefa(cliente.taskId, config)
+                    let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
                     if (typeof messageEnviada != 'undefined') {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -90,7 +90,6 @@ module.exports = {
                         } else {
                             await enviarMensagem(cliente.taskId, '✓✓')
                         }
-    
                     } else {
                         let ultimaMessage = messages.comments.filter(message => message.id == cliente.ultima_msg_enviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -99,16 +98,16 @@ module.exports = {
                             await enviarMensagem(cliente.taskId, '✓✓')
                         }
                     }
-                } catch (erro) { createLogErroWhatsapp('whatsapp', erro) }
-            }
-    
-        } else if (ack == 4) { // o arquivo de audio foi iniciado
-            console.log('destinatário escutando áudio')
-            let cliente = clienteAtivo(msg.from, config)
-            if (cliente) {
-                let messages = await getMessageTarefa(cliente.taskId, config)
-                let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
-                try {
+                }
+            } catch (erro) { createLogErroWhatsapp('whatsapp', erro) }
+        }
+        else if (ack == 4) { // o arquivo de audio foi iniciado
+            try {
+                console.log('destinatário escutando áudio')
+                let cliente = clienteAtivo(msg.from, config)
+                if (cliente) {
+                    let messages = await getMessageTarefa(cliente.taskId, config)
+                    let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
                     if (typeof messageEnviada != 'undefined') {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
@@ -125,8 +124,8 @@ module.exports = {
                             await enviarMensagem(cliente.taskId, '✓✓✓')
                         }
                     }
-                } catch (erro) { createLogErroWhatsapp('whatsapp', erro) }
-            }
+                }
+            } catch (erro) { createLogErroWhatsapp('whatsapp', erro) }
         }
     },
     sendMessage: async (client, msg, config) => {
