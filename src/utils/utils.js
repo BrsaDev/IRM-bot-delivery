@@ -48,45 +48,38 @@ module.exports = {
         return true
     },
     addCommentIdTarefa: function(taskId, commentId, id_whatsapp, timestamp, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[taskId].limpar_msg_saida = { ...registros.ativo[taskId].limpar_msg_saida, [commentId]: { id_whatsapp, timestamp } }
         fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
     deleteCommentIdTarefa: function(taskId, commentId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         delete registros.ativo[taskId].limpar_msg_saida[commentId]
         fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
     getCommentIdTarefa: function(taskId, commentId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[taskId].limpar_msg_saida[commentId] || false )
     },
     getCommentsTarefa: function(taskId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[taskId].limpar_msg_saida || false )
     },
     addUltimoCommentIdUser: function(user, commentId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[user].ultima_msg_enviada = commentId
         fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
     addCommentIdUser: function(user, whatsappId, commentId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[user].msgs_enviada = { ...registros.ativo[user].msgs_enviada, [whatsappId]: commentId }
         fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
     deleteCommentIdUser: function(user, whatsappId, config) {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         delete registros.ativo[user].msgs_enviada[whatsappId]
         fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
