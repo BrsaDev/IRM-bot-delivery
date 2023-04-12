@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { clienteConfigSet, setConfigClickup } = require("../utils/utils")
-const { receiverWebhookClickup } = require("../utils/utilsWebhookClickup")
+const { receiverWebhookClickup, whatsappOff } = require("../utils/utilsWebhookClickup")
 const session = require('../whatsapp')
 let { conexaoClientes } = require('../model/conexaoClienteCache')
 const fs = require('fs')
