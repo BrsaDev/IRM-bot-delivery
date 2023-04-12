@@ -14,6 +14,10 @@ const path = require('path')
 
 
 module.exports = {
+    whatsappOff: async (res, body, config) => {
+        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nParece que você não está logado no whatsapp, entre no sistema e inicie a sessão.", config)
+        return res.status(200).json({ retorno: { status: 'OK' } })
+    },
     receiverWebhookClickup: async (client, body, idCliente, res, config) => {
         //  console.log(body.history_items[0].comment.comment)//(body.history_items[0].comment.comment)
         try {
@@ -109,15 +113,15 @@ module.exports = {
                                                     let pathArquivo = path.join(absolutePath(), `/attachments/recebidos/${comment.text}`)
                                                     //												await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                                     let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
-                                                    addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
-                                                    addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
-                                                    addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, idCliente)
+                                                    addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, config) // add id dos comentários no arquivo .json BD
+                                                    addUltimoCommentIdUser(task.user, commentId, config) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
+                                                    addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, config)
                                                     deletarArquivo(pathArquivo)
                                                     await removeTagTarefa(body.task_id, config)
                                                     // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
-                                                    let msgs = getCommentsTarefa(body.task_id, idCliente)
+                                                    let msgs = getCommentsTarefa(body.task_id, config)
                                                     for (var msg of Object.entries(msgs)) {
-                                                        if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], idCliente)
+                                                        if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], config)
                                                     }
                                                     arquivoEnviado = true
                                                     //												return res.status(200).json({ retorno: { status: 'OK' } })
@@ -131,14 +135,14 @@ module.exports = {
                                         mensagem = ((msgLiberadaSemUser.length == 0 ? `*${body.history_items[0].comment.user.username.split(' ')[0]}:*\n` : "") + mensagem)
                                     }
                                     let mensagemEnviada = await client.sendMessage(task.user, mensagem.replace('**', '*').replace('**', '*'))
-                                    addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
-                                    addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
-                                    addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, idCliente)
+                                    addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, config) // add id dos comentários no arquivo .json BD
+                                    addUltimoCommentIdUser(task.user, commentId, config) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
+                                    addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, config)
                                     await removeTagTarefa(body.task_id, config)
                                     // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
-                                    let msgs = getCommentsTarefa(body.task_id, idCliente)
+                                    let msgs = getCommentsTarefa(body.task_id, config)
                                     for (var msg of Object.entries(msgs)) {
-                                        if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], idCliente)
+                                        if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], config)
                                     }
                                     let telefoneClienteCadastradoNaTarefa = `55${resultTelefone[0].value.toString().replace('+55', '').replace(/\(*\)*\ *\-*/g, '')}`
 
@@ -177,15 +181,15 @@ module.exports = {
                                         let pathArquivo = path.join(absolutePath(), `/attachments/recebidos/${comment.text}`)
                                         //									await client.sendMessage(task.user, `*${ body.history_items[0].comment.user.username.split(' ')[0] }:*\n`)
                                         let mensagemArquivoEnviada = await client.sendMessage(task.user, MessageMedia.fromFilePath(pathArquivo), { sendAudioAsVoice: true })
-                                        addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
-                                        addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
-                                        addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, idCliente)
+                                        addCommentIdTarefa(body.task_id, commentId, mensagemArquivoEnviada._data.id.id, mensagemArquivoEnviada.timestamp, config) // add id dos comentários no arquivo .json BD
+                                        addUltimoCommentIdUser(task.user, commentId, config) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp
+                                        addCommentIdUser(task.user, mensagemArquivoEnviada._data.id.id, commentId, config)
                                         deletarArquivo(pathArquivo)
                                         await removeTagTarefa(body.task_id, config)
                                         // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
-                                        let msgs = getCommentsTarefa(body.task_id, idCliente)
+                                        let msgs = getCommentsTarefa(body.task_id, config)
                                         for (var msg of Object.entries(msgs)) {
-                                            if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], idCliente)
+                                            if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], config)
                                         }
                                         arquivoEnviado = true
                                         //									return res.status(200).json({ retorno: { status: 'OK' } })
@@ -199,14 +203,14 @@ module.exports = {
                             mensagem = ((msgLiberadaSemUser.length == 0 ? `*${body.history_items[0].comment.user.username.split(' ')[0]}:*\n` : "") + mensagem)
                         }
                         let mensagemEnviada = await client.sendMessage(task.user, mensagem.replace('**', '*').replace('**', '*'))
-                        addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, idCliente) // add id dos comentários no arquivo .json BD
-                        addUltimoCommentIdUser(task.user, commentId, idCliente) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
-                        addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, idCliente)
+                        addCommentIdTarefa(body.task_id, commentId, mensagemEnviada._data.id.id, mensagemEnviada.timestamp, config) // add id dos comentários no arquivo .json BD
+                        addUltimoCommentIdUser(task.user, commentId, config) // add ao arquivo .json na camada de user ultima mensagem enviada do clickup ao whatsapp								
+                        addCommentIdUser(task.user, mensagemEnviada._data.id.id, commentId, config)
                         await removeTagTarefa(body.task_id, config)
                         // limpar registros de mensagens que expiraram(passaram de 1 hora no registro)
-                        let msgs = getCommentsTarefa(body.task_id, idCliente)
+                        let msgs = getCommentsTarefa(body.task_id, config)
                         for (var msg of Object.entries(msgs)) {
-                            if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], idCliente)
+                            if (!validateTimeDeleteMessageWhatsapp(msg[1].timestamp)) deleteCommentIdTarefa(body.task_id, msg[0], config)
                         }
                     }
                 }

@@ -14,8 +14,14 @@ module.exports = {
         let { idCliente } = req.query
         if ( req.originalUrl == '/message' ) idCliente = "6239248700" //numero alexandre
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        await receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
-        return true
+        if ( typeof conexaoClientes[idCliente] != 'undefined' ) {
+            await receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
+            return true
+        }
+        else {
+            await whatsappOff(res, req.body, config[idCliente])
+            return false
+        }
     },
     initSession: async (req, res) => {
         let { idCliente } = req.body

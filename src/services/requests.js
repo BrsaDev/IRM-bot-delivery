@@ -2,6 +2,10 @@ const axios = require("axios");
 const fs = require('fs');
 const FormData = require('form-data');
 const BASE_URL = "https://api.clickup.com/api/v2"
+const BASE_URL_TINY = "https://api.tiny.com.br/api2/"
+const TOKEN_AP = "fd30870b2c0178cbc92a9e89c84dc8ec5940dafc"
+const TOKEN_GS = "a50d8d523387613b9dc9d4f3939dfa9d08402fe0"
+const TOKEN_MS = "f28765c7eeee88abc8df51a9f0213c85b53cb77b"
 
 module.exports = {
     criarTarefa: async (config, nome, descricao, telefone) => {
@@ -339,13 +343,13 @@ module.exports = {
         atualizarStatusPedido: async (loja, idPedido, config) => {
             try {
                 const token = {
-                    "AP": config.TOKEN_AP,
-                    "GS": config.TOKEN_GS,
-                    "MS": config.TOKEN_MS
+                    "AP": TOKEN_AP,
+                    "GS": TOKEN_GS,
+                    "MS": TOKEN_MS
                 }
                 let options = {
                     method: "post",
-                    url: `${config.BASE_URL_TINY}pedido.alterar.situacao?token=${token[loja]}&formato=json&situacao=Aprovado&id=${idPedido}`,
+                    url: `${BASE_URL_TINY}pedido.alterar.situacao?token=${token[loja]}&formato=json&situacao=Aprovado&id=${idPedido}`,
                 }
                 let response = await axios(options)
                 console.log('status do atualizado...')
@@ -357,13 +361,13 @@ module.exports = {
         incluirMarcadorPedido: async (loja, idPedido, config) => {
             try {
                 const token = {
-                    "AP": config.TOKEN_AP,
-                    "GS": config.TOKEN_GS,
-                    "MS": config.TOKEN_MS
+                    "AP": TOKEN_AP,
+                    "GS": TOKEN_GS,
+                    "MS": TOKEN_MS
                 }
                 let options = {
                     method: "post",
-                    url: `${config.BASE_URL_TINY}pedido.marcadores.incluir?token=${token[loja]}&formato=json&idPedido=${idPedido}`,
+                    url: `${BASE_URL_TINY}pedido.marcadores.incluir?token=${token[loja]}&formato=json&idPedido=${idPedido}`,
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     data: `marcadores={marcadores: [{"marcador": {"descricao": "-Tratado"}}]}`
                 }
