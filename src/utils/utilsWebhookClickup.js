@@ -9,6 +9,7 @@ const {
 } = require("./utils.js");
 const { tarefaAtiva, validaEnvioMensagem } = require("./validacao");
 const { createLogErroWhatsapp } = require('./logs')
+const { listarPedido, escreverPedidoEmTask } = require('../google')
 const path = require('path')
 
 
@@ -19,7 +20,7 @@ module.exports = {
             if (typeof body.history_items[0].comment == 'undefined' || typeof body.history_items[0].comment.comment == 'undefined') return true
             if (typeof body.history_items[0].comment.comment[0].text == 'undefined' || typeof body.history_items[0].comment.comment[body.history_items[0].comment.comment.length - 1].text == 'undefined') return true
             body.history_items[0].comment.comment = body.history_items[0].comment.comment[body.history_items[0].comment.comment.length - 1].text == '\n' ? body.history_items[0].comment.comment.slice(0, body.history_items[0].comment.comment.length - 1) : body.history_items[0].comment.comment
-            if (validaEnvioMensagem(body, config, idCliente)) {
+            if (validaEnvioMensagem(body, config)) {
                 // let msgLiberada = body.history_items[0].comment.comment.filter(text => text.text.toString().slice(0, 2) == "==")
                 let msgLiberadaComUser = body.history_items[0].comment.comment.filter(text => text.text.toString().includes("=="))
                 let msgLiberadaSemUser = body.history_items[0].comment.comment.filter(text => text.text.toString().includes("--"))
