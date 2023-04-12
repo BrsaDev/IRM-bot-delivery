@@ -60,6 +60,7 @@ const session = async function (idCliente) {
     })
     
     client.on(`message`, async msg => {
+        if (msg.from == "status@broadcast" || msg.type == "e2e_notification" || msg.type == "protocol") return true
         let configCliente = configGetCliente(msg.to.replace('@c.us', '').slice(2)) 
         console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n', configCliente)
         await sendMessage(client, msg, configCliente)

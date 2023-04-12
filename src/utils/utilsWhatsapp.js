@@ -6,6 +6,7 @@ const { ativarTarefa, ativarCliente, deletarArquivo, sleep, dataHotaAtualSimples
 const { clienteAtivo } = require("./validacao");
 const { createLogErroWhatsapp } = require('./logs')
 const path = require('path')
+const fs = require('fs')
 
 var clienteTemp = {}
 
@@ -13,7 +14,7 @@ module.exports = {
     confirmMessage: async (msg, ack, config) => {
         if (ack == -1) { // ocorreu erro ao envia a mensagem
             console.log('erro no envio da mensagem')
-            let cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
+            let cliente = clienteAtivo(msg.from, config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -35,7 +36,7 @@ module.exports = {
             console.log('mensagem enviada, aguardando chegar ao destinatário')
         } else if (ack == 1) { // mensagem foi enviada, mas não foi baixada no dispositovo do destinatário
             console.log('mensagem entregue, mas não lida ou arquivo não baixado')
-            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
+            let cliente = clienteAtivo(msg.from, config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -55,7 +56,7 @@ module.exports = {
             }
         } else if (ack == 2) { // mensagem chegou ao detinatário
             console.log('mensagem entregue ao destinatário')
-            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
+            let cliente = clienteAtivo(msg.from, config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -76,7 +77,7 @@ module.exports = {
         }
         else if (ack == 3) { // mensagem foi lida
             console.log('mensagem lida pelo destinatário')
-            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
+            let cliente = clienteAtivo(msg.from, config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -85,7 +86,7 @@ module.exports = {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
                             await atualizarMensagem(messageEnviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '').replace('\n✓', '').replace('\n✓', '')}\n✓✓`, config)
-                            deleteCommentIdUser(msg.to.replace('@c.us', '').slice(2), msg._data.id.id)
+                            deleteCommentIdUser(msg.from.slice(2), msg._data.id.id)
                         } else {
                             await enviarMensagem(cliente.taskId, '✓✓')
                         }
@@ -103,7 +104,7 @@ module.exports = {
     
         } else if (ack == 4) { // o arquivo de audio foi iniciado
             console.log('destinatário escutando áudio')
-            let cliente = clienteAtivo(msg.to.replace('@c.us', ''), config)
+            let cliente = clienteAtivo(msg.from, config)
             if (cliente) {
                 let messages = await getMessageTarefa(cliente.taskId, config)
                 let messageEnviada = cliente.msgs_enviada[msg._data.id.id]
@@ -112,7 +113,7 @@ module.exports = {
                         let ultimaMessage = messages.comments.filter(message => message.id == messageEnviada)[0]
                         if (typeof ultimaMessage.comment != 'undefined' && ultimaMessage.comment.filter(element => element.attachment).length == 0) {
                             await atualizarMensagem(messageEnviada, `${ultimaMessage.comment_text.replace('\n✕', '').replace('\n✓', '').replace('\n✓', '')}\n✓✓✓`, config)
-                            deleteCommentIdUser(msg.to.replace('@c.us', '').slice(2), msg._data.id.id)
+                            deleteCommentIdUser(msg.from.slice(2), msg._data.id.id)
                         } else {
                             await enviarMensagem(cliente.taskId, '✓✓✓')
                         }
@@ -129,7 +130,6 @@ module.exports = {
         }
     },
     sendMessage: async (client, msg, config) => {
-        if (msg.from == "status@broadcast" || msg.type == "e2e_notification" || msg.type == "protocol") return true
         if (msg.body == "status webhook") {
             let resultWebhook = await getStatusWebhook(config)
             await msg.reply(`*id:* ${resultWebhook.id}\n*status:* ${resultWebhook.status}`)
@@ -143,7 +143,7 @@ module.exports = {
         }
 
         let nomeCliente = (typeof msg._data.notifyName == "undefined" ? "Sem Nome" : msg._data.notifyName)
-        var cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
+        var cliente = clienteAtivo(msg.from, config)
 
         if (!cliente && typeof clienteTemp[msg.from] == 'undefined') {
             clienteTemp[msg.from] = true
@@ -162,15 +162,15 @@ module.exports = {
                 return false
             }
             newTask.configTask.user = msg.from
-            ativarTarefa(newTask.taskId, newTask.configTask)
-            ativarCliente(msg.from, newTask.taskId)
-            cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
+            ativarTarefa(newTask.taskId, newTask.configTask, config)
+            ativarCliente(msg.from, newTask.taskId, config)
+            cliente = clienteAtivo(msg.from, config)
         } else {
             await sleep(5000)
-            cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
+            cliente = clienteAtivo(msg.from, config)
             if (!cliente) {
                 await sleep(2000)
-                cliente = config[msg.to.replace('@c.us', '').slice(2)] || false
+                cliente = clienteAtivo(msg.from, config)
             }
             if (cliente && typeof clienteTemp[msg.from] != 'undefined') delete clienteTemp[msg.from]
         }

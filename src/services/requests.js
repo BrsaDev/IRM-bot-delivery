@@ -16,7 +16,6 @@ module.exports = {
             }                                                                                                                                    
             let response = await axios(options)
             console.log('tarefa criada...')
-            //            console.log(response.data) // Trás os dados da tarefa criada
             return { taskId: response.data.id, configTask: { user: "" } }
         } catch (err) {
             console.log(err.response.data)
@@ -293,6 +292,22 @@ module.exports = {
             let response = await axios(options)
             //            console.log('status webhook obtido...')
             //            console.log(response.data.webhooks)
+            return { id: response.data.webhooks[0].id, status: response.data.webhooks[0].health.status, events: response.data.webhooks[0].events, endpoint: response.data.webhooks[0].endpoint }
+        } catch (err) {
+            return { erro: err }
+        }
+    },
+    createWebhook: async (config, idCliente) => {
+        try {
+            let options = {
+                method: "post",
+                url: `${ BASE_URL }/team/${config.idTeam}/webhook`,
+                headers: {
+                    "Authorization": config.TOKEN
+                },
+                data: { endpoint: `http://89.117.55.232:3000/message?idCliente=${ idCliente }`, events: [ "taskCommentPosted" ] }
+            }
+            let response = await axios(options)
             return { id: response.data.webhooks[0].id, status: response.data.webhooks[0].health.status, events: response.data.webhooks[0].events, endpoint: response.data.webhooks[0].endpoint }
         } catch (err) {
             return { erro: err }

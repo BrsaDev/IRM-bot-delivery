@@ -2,17 +2,17 @@ const fs = require("fs")
 const path = require('path')
 
 module.exports = {
-    tarefaAtiva: (taskId, config, idCliente) => {
-        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
+    tarefaAtiva: (taskId, config) => {
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[taskId] || false )
     },
     tarefaInativa: (taskId, config, idCliente) => {
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
         return (registros.inativo[taskId] || false)
     },
-    clienteAtivo: (telefone, config) => {
+    clienteAtivo: (idTransacao, config) => {
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
-        return ( registros.ativo[telefone] || false )
+        return ( registros.ativo[idTransacao] || false )
     },
     validaEnvioMensagem: function(body, config, idCliente) {
         let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))

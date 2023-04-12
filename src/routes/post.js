@@ -10,16 +10,16 @@ const path  = require('path')
 const baseUrlApiGoogle = "https://script.google.com/macros/s/AKfycbyRhhah_kW0xmzpkSaV_5gxwZkmCIwt7cHAqR9nIbVGIEEjkwi8JVLUaRD1XwyQ0k0mbw/exec"
 
 module.exports = {
-    message: (req, res) => {
+    message: async (req, res) => {
         let { idCliente } = req.query
-        if ( req.originalUrl == '/message' ) idCliente = "numero alexandre"
+        if ( req.originalUrl == '/message' ) idCliente = "6239248700" //numero alexandre
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
+        await receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
         return true
     },
-    initSession: (req, res) => {
+    initSession: async (req, res) => {
         let { idCliente } = req.body
-        conexaoClientes[idCliente] = session(idCliente)
+        conexaoClientes[idCliente] = await session(idCliente)
         return res.json({ status: 'OK' })
     },
     closeSession: async (req, res) => {

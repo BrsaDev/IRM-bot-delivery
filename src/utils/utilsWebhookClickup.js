@@ -32,7 +32,7 @@ module.exports = {
                         let pedido = await listarPedido(numeroPedido)
                         if (pedido.status == 'Pedido não localizado' || pedido.status == 'Pedido não localizado') {
                             await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
-                            await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                            await client.sendMessage(config.TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
                             return true
                         }
                         await Tiny.incluirMarcadorPedido(pedido.loja, pedido.id_pedido, config)
@@ -51,7 +51,7 @@ module.exports = {
                             let pedido = await listarPedido(numeroPedido)
                             if (pedido.status == 'Pedido não localizado' || pedido.status == 'Pedido não localizado') {
                                 await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
-                                await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
+                                await client.sendMessage(config.TELEFONE_NOTIFICACAO, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.")
                                 return true// res.status(200).json({ retorno: { status: 'ERRO' } })
                             }
                             await escreverPedidoEmTask(body.task_id, pedido)
@@ -65,13 +65,13 @@ module.exports = {
                         return false// res.status(200).json({ retorno: { status: 'ERRO' } })
                     }
                 } else if (msgLiberadaComUser.length == 0 || msgLiberadaSemUser.length > 0) {
-                    let task = tarefaAtiva(body.task_id, config, idCliente)
+                    let task = tarefaAtiva(body.task_id, config)
                     if (!task) {
                         let responseFields = await getCamposExtraTarefa(body.task_id, config)
                         //  console.log(responseFields)
                         if (responseFields.erro) {
                             createLogErroWhatsapp('whatsapp', responseFields.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
-                            await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `01-Não foi possivel enviar a mensagem ao destinatário no WhatsApp com a tarefa:\n${body.task_id}`)
+                            await client.sendMessage(config.TELEFONE_NOTIFICACAO, `01-Não foi possivel enviar a mensagem ao destinatário no WhatsApp com a tarefa:\n${body.task_id}`)
                         } else {
                             let resultTelefone = responseFields.filter(item => item.name == "WhatsApp")
                             // console.log(resultTelefone)
@@ -80,11 +80,11 @@ module.exports = {
                                 // let telefoneCliente = `55${resultTelefone[0].value.toString().replace(/5*\(*\)*\ *\+*\-*/g, '')}@c.us`							
                                 let telefoneCliente = await validateNumberWhatsapp(client, resultTelefone[0].value)
                                 if (telefoneCliente) {
-                                    ativarTarefa(body.task_id, { user: telefoneCliente }, idCliente)
-                                    ativarCliente(telefoneCliente, body.task_id, idCliente)
-                                    task = tarefaAtiva(body.task_id, config, idCliente)
+                                    ativarTarefa(body.task_id, { user: telefoneCliente }, config)
+                                    ativarCliente(telefoneCliente, body.task_id, config)
+                                    task = tarefaAtiva(body.task_id, config)
                                     if (!task) {
-                                        client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `02-Não foi possivel enviar a mensagem ao destinatário no WhatsApp com a tarefa:\n${body.task_id}`)
+                                        client.sendMessage(config.TELEFONE_NOTIFICACAO, `02-Não foi possivel enviar a mensagem ao destinatário no WhatsApp com a tarefa:\n${body.task_id}`)
                                     }
                                     //								let mensagem = ( msgLiberadaSemUser.length == 0 ? `*${body.history_items[0].comment.user.username.split(' ')[0]}:*\n` : "" )
                                     let mensagem = ""
@@ -95,13 +95,13 @@ module.exports = {
                                             let result = await getAttachmentsTarefa(body.task_id, config)
                                             if (result.erro) {
                                                 createLogErroWhatsapp('whatsapp', result.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
-                                                await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                                await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
                                                 await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                             } else {
                                                 let attachment = result.filter(attachment => attachment.title == comment.text)
                                                 //  console.log(attachment)
                                                 if (attachment.length == 0) {
-                                                    await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
                                                     await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                                 } else {
                                                     baixarArquivoPorUrl(attachment[0].url, comment.text)
@@ -145,10 +145,10 @@ module.exports = {
                                 } else {
                                     await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.", config, "Integração:\n")
 
-                                    await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.\n*Tarefa:* ${body.task_id}`)
+                                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO telefone informado NÃO possui WhatsApp ativo. Insira um número válido e reenvie a mensagem.\n*Tarefa:* ${body.task_id}`)
                                 }
                             } else {
-                                // await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `SeParece que não temos o campo Whatsapp para enviar msg para o cliente com a tarefa:\n${body.task_id}`)
+                                // await client.sendMessage(config.TELEFONE_NOTIFICACAO, `SeParece que não temos o campo Whatsapp para enviar msg para o cliente com a tarefa:\n${body.task_id}`)
                                 await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nO campo WhatsApp está vazio\nPara enviar mensagem interna, inicie a mensagem com ==", config, "Integração:\n")
                             }
                         }
@@ -163,13 +163,13 @@ module.exports = {
                                 let result = await getAttachmentsTarefa(body.task_id, config)
                                 if (result.erro) {
                                     createLogErroWhatsapp('whatsapp', result.erro, { taskId: body.task_id, comment: body.history_items[0].comment })
-                                    await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                    await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
                                     await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                 } else {
                                     let attachment = result.filter(attachment => attachment.title == comment.text)
                                     // console.log(attachment)
                                     if (attachment.length == 0) {
-                                        await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
+                                        await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`)
                                         await enviarMensagem(body.task_id, `*** ATENÇÃO: MSG DO SISTEMA ***\nO arquivo ${comment.text} não pôde ser enviado. REENVIE O ARQUIVO.`, config)
                                     } else {
                                         baixarArquivoPorUrl(attachment[0].url, comment.text)
@@ -219,7 +219,7 @@ module.exports = {
                 client.destroy()
                 client.initialize()
                 console.log(erro, "=>", dataHotaAtual())
-                await client.sendMessage(config[idCliente].TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem\n*MENSAGEM DE ERRO:* \n${erro}`)
+                await client.sendMessage(config.TELEFONE_NOTIFICACAO, `*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem\n*MENSAGEM DE ERRO:* \n${erro}`)
                 await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nHouve um erro ao enviar a mensagem. Tente novamente e se o erro persistir, notifique o Administrador.(Exception 1)", config, "Integração:\n")
                 return res.status(200).json({ retorno: { status: 'ERRO' } })
             } catch (erro) {

@@ -3,23 +3,22 @@ const { clienteAtivo } = require("./validacao");
 const path = require('path')
 
 module.exports = {
-    ativarTarefa: (taskId, configCliente, idCliente) => {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        if ( !clienteAtivo(taskId) ) {
-            let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+    ativarTarefa: (taskId, configCliente, config) => {
+        if ( !clienteAtivo(taskId, config) ) {
+            let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
             registros.ativo = { ...registros.ativo, [taskId]: configCliente }
-            fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+            fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         }
         return true
     },
     inativarTarefa: (taskId, idCliente) => {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let task = clienteAtivo(taskId)
+        let task = clienteAtivo(taskId, config)
         if ( task ) {
-            let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+            let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
             registros.inativo = { ...registros.inativo, [taskId]: task }
             delete registros.ativo[taskId]
-            fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+            fs.writeFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL), JSON.stringify(registros))
         }
         return true
     },
@@ -27,70 +26,70 @@ module.exports = {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         let task = clienteInativo(taskId)
         if ( task ) {
-            let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+            let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
             registros.ativo = { ...registros.inativo, [taskId]: task }
             delete registros.inativo[taskId]
             fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
         }
         return true
     },
-    ativarCliente: (telefone, taskId, idCliente) => {
-        let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+    ativarCliente: (telefone, taskId, config) => {
+        // let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo = { ...registros.ativo, [telefone]: { taskId: taskId } }
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
     inativarCliente: (telefone, idCliente) => {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL)))
         delete registros.ativo[telefone]
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config[idCliente].MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
-    addCommentIdTarefa: function(taskId, commentId, id_whatsapp, timestamp, idCliente) {
+    addCommentIdTarefa: function(taskId, commentId, id_whatsapp, timestamp, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[taskId].limpar_msg_saida = { ...registros.ativo[taskId].limpar_msg_saida, [commentId]: { id_whatsapp, timestamp } }
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
-    deleteCommentIdTarefa: function(taskId, commentId, idCliente) {
+    deleteCommentIdTarefa: function(taskId, commentId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         delete registros.ativo[taskId].limpar_msg_saida[commentId]
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
-    getCommentIdTarefa: function(taskId, commentId, idCliente) {
+    getCommentIdTarefa: function(taskId, commentId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[taskId].limpar_msg_saida[commentId] || false )
     },
-    getCommentsTarefa: function(taskId, idCliente) {
+    getCommentsTarefa: function(taskId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         return ( registros.ativo[taskId].limpar_msg_saida || false )
     },
-    addUltimoCommentIdUser: function(user, commentId, idCliente) {
+    addUltimoCommentIdUser: function(user, commentId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[user].ultima_msg_enviada = commentId
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
-    addCommentIdUser: function(user, whatsappId, commentId, idCliente) {
+    addCommentIdUser: function(user, whatsappId, commentId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         registros.ativo[user].msgs_enviada = { ...registros.ativo[user].msgs_enviada, [whatsappId]: commentId }
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },
-    deleteCommentIdUser: function(user, whatsappId, idCliente) {
+    deleteCommentIdUser: function(user, whatsappId, config) {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
-        let registros = JSON.parse(fs.readFileSync(config[idCliente].MODEL_LOCAL))
+        let registros = JSON.parse(fs.readFileSync(path.join(absolutePath(), config.MODEL_LOCAL)))
         delete registros.ativo[user].msgs_enviada[whatsappId]
-        fs.writeFileSync(config[idCliente].MODEL_LOCAL, JSON.stringify(registros))
+        fs.writeFileSync(path.join(absolutePath(), config.MODEL_LOCAL), JSON.stringify(registros))
         return true
     },	
     baixarArquivoPorUrl: async function(uri, filename){
