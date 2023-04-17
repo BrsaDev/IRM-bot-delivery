@@ -42,7 +42,7 @@
                         <input name="pass" type="password" class="form-control" id="pass">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Token Click-Up</label>
+                        <label class="form-label">Token click-Up</label>
                         <input name="token" type="text" class="form-control" id="token">
                     </div>
                     <div class="col-md-6">
@@ -54,8 +54,8 @@
                         <input name="id-team" type="text" class="form-control" id="id-team">
                     </div>
                     <div class="col-md-6">
-                        <label class="form-label">Id tarefa notificação</label>
-                        <input name="id-tarefa" type="text" class="form-control" id="id-tarefa">
+                        <label class="form-label">Nome user master click-up</label>
+                        <input name="id-user-master" type="text" class="form-control" id="id-user-master">
                     </div>
                     <div class="d-grid mb-3">
                         <button id="salvar" type="submit" class="btn btn-primary">Cadastrar<img id="load" class="d-none ms-2" width="23" height="23" src="https://thumbs.gfycat.com/DarkFlamboyantGecko-max-1mb.gif" alt="gif-load"></button>
@@ -78,9 +78,9 @@
             let token = document.querySelector('#token')
             let idLista = document.querySelector('#id-lista')
             let idTeam = document.querySelector('#id-team')
-            let idTarefa = document.querySelector('#id-tarefa')
+            let idUserMaster = document.querySelector('#id-user-master')
             let tipo = "cadastrar"
-            for ( item of [ nome, telefone, email, pass, token, idLista, idTeam, idTarefa ] ) {
+            for ( item of [ nome, telefone, email, pass, token, idLista, idTeam, idUserMaster ] ) {
                 if ( item.value == "" ) setRota('/erro?tipo=cadastrar')
             }
             
@@ -91,7 +91,7 @@
                 url: "http://89.117.55.232:3000/acessar",
                 data: { 
                     email: email.value, pass: pass.value, nome: nome.value, telefone: telefone.value, 
-                    token: token.value, idLista: idLista.value, idTeam: idTeam.value, idTarefa: idTarefa.value, tipo 
+                    token: token.value, idLista: idLista.value, idTeam: idTeam.value, idUserMaster: idUserMaster.value, tipo 
                 },
                 mode: "no-cors",
                 headers: { "Content-Type": "application/json" },
@@ -109,7 +109,7 @@
                 token.value = ""
                 idLista.value = ""
                 idTeam.value = ""
-                idTarefa.value = ""
+                idUserMaster.value = ""
             }
             else if ( result.data.cadastrado ) {
                 load.classList.remove('d-inline')
@@ -123,7 +123,7 @@
                 token.value = ""
                 idLista.value = ""
                 idTeam.value = ""
-                idTarefa.value = ""
+                idUserMaster.value = ""
             }else {
                 load.classList.remove('d-inline')
                 load.classList.add('d-none')

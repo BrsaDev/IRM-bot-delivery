@@ -157,13 +157,13 @@ module.exports = {
         fs.writeFileSync(path.join(absolutePath(), '/model/config.json'), JSON.stringify(config))
         return true
     },
-    setConfigClickup: (idCliente, token, idLista, idTeam, idTarefa) => {
+    setConfigClickup: (idCliente, token, idLista, idTeam, idUserMaster) => {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         if ( typeof config[idCliente] != 'undefined' ) {
             config[idCliente]['TOKEN'] = token
             config[idCliente]['ID_LISTA_CLIENTES'] = idLista
             config[idCliente]['ID_TEAM_CLICKUP'] = idTeam
-            config[idCliente]['TAREFA_MASTER'] = idTarefa
+            config[idCliente]['USER_MASTER'] = idUserMaster
         }else {
             config[idCliente] = {}
             config[idCliente]["nome_qrcode"] = "",
@@ -176,7 +176,7 @@ module.exports = {
             config[idCliente]['ID_LISTA_CLIENTES'] = idLista
             config[idCliente]['ID_TEAM_CLICKUP'] = idTeam
             config[idCliente]['TELEFONE_NOTIFICACAO'] = idCliente + "@c.us"
-            config[idCliente]['TAREFA_MASTER'] = idTarefa
+            config[idCliente]['USER_MASTER'] = idUserMaster
         }
         let configClienteClickup = {
             "ativo": {},

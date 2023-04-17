@@ -14,9 +14,11 @@ const path = require('path')
 
 
 module.exports = {
-    whatsappOff: async (res, body, config) => {
-        await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nParece que você não está logado no whatsapp, entre no sistema e inicie a sessão.", config)
-        return res.status(200).json({ retorno: { status: 'OK' } })
+    whatsappOff: async (body, config) => {
+        if (validaEnvioMensagem(body, config)) {
+            await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nParece que você não está logado no whatsapp, entre no sistema e inicie a sessão.", config)
+            return true
+        }
     },
     receiverWebhookClickup: async (client, body, idCliente, res, config) => {
         //  console.log(body.history_items[0].comment.comment)//(body.history_items[0].comment.comment)
@@ -45,7 +47,7 @@ module.exports = {
                         return true
                     } else {
                         await enviarMensagem(body.task_id, "*** ATENÇÃO: MSG DO SISTEMA ***\nErro ao buscar dados do Pedido. Revise o número do pedido e tente novamente.", config)
-                        return true// res.status(200).json({ retorno: { status: 'ERRO' } })
+                        return true
                     }
                 } else if (atualizaInfoTask.length > 0) {
                     // aqui colocar infos do pedido na tarefa

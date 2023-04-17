@@ -16,11 +16,11 @@ module.exports = {
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         if ( typeof conexaoClientes[idCliente] != 'undefined' ) {
             await receiverWebhookClickup(conexaoClientes[idCliente], req.body, idCliente, res, config[idCliente])
-            return true
+            return res.status(200).json({ retorno: { status: 'OK' } })
         }
         else {
-            await whatsappOff(res, req.body, config[idCliente])
-            return false
+            await whatsappOff(req.body, config[idCliente])
+            return res.status(200).json({ retorno: { status: 'OK' } })
         }
     },
     initSession: async (req, res) => {
@@ -47,11 +47,11 @@ module.exports = {
         return res.json({ status: response.data.status })
     },
     acessar: async (req, res) => {
-        let { email, pass, nome, telefone, token, idLista, idTeam, idTarefa, tipo } = req.body
+        let { email, pass, nome, telefone, token, idLista, idTeam, idUserMaster, tipo } = req.body
         if ( email == "" || pass == "" ) return res.redirect('/erro?tipo=' + tipo)
         let urlFinal = `?tipo=${ tipo }&user=${ email }&senha=${ pass }`
         if ( tipo == "cadastrar" ) { 
-            setConfigClickup(telefone, token, idLista, idTeam, idTarefa)
+            setConfigClickup(telefone, token, idLista, idTeam, idUserMaster)
             let newIdCliente = "excluir"
             urlFinal = `?tipo=${ tipo }&user=${ email }&senha=${ pass }&nome=${ nome }&telefone=${ telefone }&idCliente=${ newIdCliente }`
         }
