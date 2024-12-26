@@ -1,0 +1,116 @@
+.container-setting {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #e7e7e7;
+}
+#i-menu-open-setting {
+    display: none;
+    position: absolute;
+    top: 35px;
+    left: 25px;
+    z-index: 999;
+    color: #55a576;
+    font-size: 20px;
+    cursor: pointer;
+}
+#i-menu-close-setting {
+    position: absolute;
+    top: 8px;
+    left: 170px;
+    z-index: 999;
+    color: #55a576;
+}
+#i-close-setting {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 999;
+    color: #55a576;
+}
+.btn-edit-text-tutorial-cadastro, .btn-edit-img-tutorial-cadastro, #btn-habilita-edit-tutorial-cadastro {
+    color: #7b68ee;
+    cursor: pointer;
+    font-size: 20px;
+}
+#left-setting {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+    border-right: 1px solid #999;
+    width: 190px;
+}
+#right-setting {
+    margin: 0 auto !important;
+    width: 80%;
+}
+#i-user-setting {
+    font-size: 30px;
+    color: #55a576;
+}
+.content-principal {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+}
+.item-explicacao {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+.item-explicacao img {
+    width: 100%;
+    /* -webkit-transition: all 1s ease; */
+    /* Safari and Chrome */
+    /* -moz-transition: all 1s ease; */
+    /* Firefox */
+    /* -o-transition: all 1s ease; */
+    /* IE 9 */
+    /* -ms-transition: all 1s ease; */
+    /* Opera */
+    /* transition: all 1s ease; */
+}
+/* .item-explicacao img:hover {
+    margin-top: -40px;
+    -webkit-transform: scale(1.25);
+    -moz-transform: scale(1.25);
+    -ms-transform: scale(1.25);
+    -o-transform: scale(1.25);
+    transform: scale(1.25);
+} */
+
+.i-textearea-edit-text-tutorial-cadastro {
+    font-size: 20px;
+    cursor: pointer;
+    margin-bottom: 4px;
+}
+@keyframes fadein {
+    from { width: 0; }
+    to   { width: 193px; }
+}
+@keyframes fadeout {
+    from { width: 193px; }
+    to   { width: 0; }
+}
+@media (max-width:767px) {
+    #left-setting {
+        display: none;
+        position: absolute;
+        height: 97%;
+        background-color: #e7e7e7;
+        border-bottom: 1px solid #999;
+    }
+    #right-setting {
+        width: 100%;
+    }
+    #i-menu-open-setting {
+        display: block;
+    }
+    #i-menu-close-setting {
+        display: none;
+    }
+}
+

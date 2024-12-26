@@ -15,6 +15,7 @@ module.exports = {
     },
     qrcode: (req, res) => {
         let { idCliente } = req.query
+        idCliente = idCliente
         let config = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/config.json')))
         if ( fs.existsSync(path.join(absolutePath(), `/pages/assets/${ config[idCliente].nome_qrcode }.svg`)) ) {
             return res.json({ nome_qrcode: config[idCliente].nome_qrcode, autenticado: config[idCliente].autenticado })

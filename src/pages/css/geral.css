@@ -26,3 +26,18 @@ a {
 .cursor-pointer {
     cursor: pointer;
 }
+.head-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 18px;
+    margin-right: 10px;
+    border-bottom: 1px solid #999;
+}
+.head-left label {
+    font-size: 12px;
+}
+.body-left {
+    margin-right: 10px;
+}

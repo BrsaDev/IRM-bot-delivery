@@ -1,18 +1,22 @@
-const { Client, LocalAuth, MessageMedia } = require("whatsapp-web.js");
+const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require('qrcode-terminal');
 const qrimage = require('qr-image');
 const fs = require(`fs`);
 const { clienteConfigSet, configGetCliente, deletarArquivo } = require("./utils/utils");
-const { confirmMessage, sendMessage } = require('./utils/utilsWhatsapp')
+const { sendMessage } = require('./utils/utilsWhatsapp')
+let stages = require("./model/stages")
 
 const session = async function (idCliente) {
  
     const client = new Client({
         // restartOnAuthFail: true,
-        puppeteer: { executablePath: "/usr/bin/chromium" },
+        // puppeteer: { executablePath: "/usr/bin/chromium" },
         authStrategy: new LocalAuth({
             clientId: idCliente
-        })
+        }),
+        puppeteer: {
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        }
     });
     console.log('iniciando o cliente ' + idCliente)
 
@@ -55,19 +59,26 @@ const session = async function (idCliente) {
     });
 
     client.on('message_ack', async (msg, ack) => {
-        let configCliente = configGetCliente(msg.to.replace('@c.us', ''))
-        await confirmMessage(msg, ack, configCliente)
+        return
     })
     
-    client.on(`message`, async msg => {
+    client.on(`message_create`, async msg => {
         if (msg.from == "status@broadcast" || msg.type == "e2e_notification" || msg.type == "protocol") return true
-        let configCliente = configGetCliente(msg.to.replace('@c.us', '').slice(2)) 
-        console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n', configCliente)
-        await sendMessage(client, msg, configCliente)
+        let users = JSON.parse(fs.readFileSync(`${__dirname}/model/users.json`))
+        if ( typeof users[msg.to.slice(2).replace('@c.us', '')] != 'undefined' && msg.from != msg.to ) { 
+            console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n =>>>---', users[msg.to.slice(2).replace('@c.us', '')])
+            await sendMessage(client, msg, users[msg.to.slice(2).replace('@c.us', '')])
+            return true
+        }
+
+        let telClienteEmpresa = msg.to + msg.from.slice(2).replace('@c.us', '')
+        if ( msg.body.toString().toLowerCase() == 'finalizar atendimento' && typeof stages[telClienteEmpresa] != 'undefined' ) {
+            await client.sendMessage(msg.to, "Atendimento finalizado.")
+            return true
+        }
     });
 
     return client;
 };
-
 
 module.exports = session

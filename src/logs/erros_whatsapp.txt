@@ -16,3 +16,141 @@
     at processTicksAndRejections (node:internal/process/task_queues:96:5) 
 
 -----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  18/07/2023 15:54:21
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  18/07/2023 17:44:38
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  18/07/2023 17:46:21
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  19/07/2023 12:37:24
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  19/07/2023 12:37:35
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------
+
+ ---> [ DATA ]  19/07/2023 12:38:04
+ ---> [ ERRO ]  TypeError [ERR_INVALID_ARG_TYPE]: The "path" argument must be of type string. Received undefined
+    at new NodeError (node:internal/errors:372:5)
+    at validateString (node:internal/validators:120:11)
+    at Object.join (node:path:429:7)
+    at clienteAtivo (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\validacao.js:14:57)
+    at confirmMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\utils\utilsWhatsapp.js:81:31)
+    at Client.<anonymous> (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\src\whatsapp.js:59:15)
+    at Client.emit (node:events:527:28)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\whatsapp-web.js\src\Client.js:454:18
+    at Page._onBindingCalled (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:998:62)
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Page.js:152:60
+    at C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:62
+    at Array.map (<anonymous>)
+    at Object.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\vendor\mitt\src\index.js:51:43)
+    at CDPSession.emit (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\EventEmitter.js:72:22)
+    at CDPSession._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:249:18)
+    at Connection._onMessage (C:\Users\Bruno\Documents\Grupo Avenue\Whatsapp-multi-usuario\node_modules\puppeteer\lib\cjs\puppeteer\common\Connection.js:117:25) {
+  code: 'ERR_INVALID_ARG_TYPE'
+} 
+
+-----------------------------------------------------------------------------------

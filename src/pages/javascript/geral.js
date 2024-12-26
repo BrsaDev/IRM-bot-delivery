@@ -7,9 +7,12 @@ let cadastrar = document.querySelector('#btn-cadastrar')
 let boasVindas = document.querySelector('#boas-vindas')
 
 
-if ( idCliente == "556239248700" ) {
+if ( idCliente == "22997585299" ) {
     cadastrar.classList.remove('d-none')
     cadastrar.classList.add('d-block')
+}
+if ( document.URL.includes("cadastrar") && idCliente != "22997585299" ) {
+    setRota('/home')
 }
 if ( idCliente ) {
     boasVindas.classList.remove('d-none')
@@ -46,7 +49,9 @@ logout.addEventListener('click', async function () {
     setRota('/home')
     await sleep(1000)
 })
+
 qr.addEventListener('click', function() {
     if ( idCliente ) return qr.href = '/qr?idCliente=' + idCliente
     else return login.click()    
 })
+
