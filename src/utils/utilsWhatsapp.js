@@ -17,7 +17,7 @@ module.exports = {
             await client.sendMessage(msg.from, configUser['0'])
             return true
         }
-        if ( msg.body == '1' && stages[telClienteEmpresa] != '61' ) {  //msg cardápio
+        if ( msg.body == '1' && stages[telClienteEmpresa] != '61' ) {  //msg status do pedido
             stages[telClienteEmpresa] = "11"
             await client.sendMessage(msg.from, "Ok! Informe o número do Pedido Ex: PED123456789")
             return true
