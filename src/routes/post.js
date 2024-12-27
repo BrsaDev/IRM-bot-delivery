@@ -94,7 +94,7 @@ module.exports = {
         try {
             if ( typeof configStatus.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
             if ( typeof users[configStatus.telefone] != 'undefined' ) {
-                users[configStatus.telefone].pedidos[configStatus.numero_pedido] = {status: configStatus.status}
+                users[configStatus.telefone].pedidos[configStatus.numero_pedido.toString().toUpperCase()] = {status: configStatus.status}
                 fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
                 return res.status(200).json({resultado: "Status atualizado com sucesso!"})
             }else {

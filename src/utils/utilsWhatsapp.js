@@ -41,8 +41,8 @@ module.exports = {
         }
         if ( stages[telClienteEmpresa] == '11' ) { // retorna o status do pedido
             stages[telClienteEmpresa] = 'init'
-            if ( typeof configUser.pedidos[msg.body] != 'undefined' ) {
-                await client.sendMessage(msg.from, `*${configUser.pedidos[msg.body].status}*`)  
+            if ( typeof configUser.pedidos[msg.body.toUpperCase()] != 'undefined' ) {
+                await client.sendMessage(msg.from, `*${configUser.pedidos[msg.body.toUpperCase()].status}*`)  
             }else {
                 await client.sendMessage(msg.from, "O número do pedido não foi encontrado, ou não houve atualização no status.") 
             }
