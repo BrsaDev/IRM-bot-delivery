@@ -6,13 +6,6 @@ let qr = document.querySelector('#btn-qr')
 let boasVindas = document.querySelector('#boas-vindas')
 
 
-if ( idCliente == "22997585299" ) {
-    cadastrar.classList.remove('d-none')
-    cadastrar.classList.add('d-block')
-}
-if ( document.URL.includes("cadastrar") && idCliente != "22997585299" ) {
-    setRota('/home')
-}
 if ( idCliente ) {
     boasVindas.classList.remove('d-none')
     boasVindas.classList.add('d-flex')

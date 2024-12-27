@@ -72,7 +72,7 @@ const session = async function (idCliente) {
         }
 
         let telClienteEmpresa = msg.to + msg.from.slice(2).replace('@c.us', '')
-        if ( msg.body.toString().toLowerCase() == 'finalizar atendimento' && typeof stages[telClienteEmpresa] != 'undefined' ) {
+        if ( msg.body.toString().toLowerCase() == 'menu' && typeof stages[telClienteEmpresa] != 'undefined' ) {
             await client.sendMessage(msg.to, "Atendimento finalizado.")
             return true
         }

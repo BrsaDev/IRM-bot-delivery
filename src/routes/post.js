@@ -36,17 +36,6 @@ module.exports = {
         delete conexaoClientes[idCliente]
         return res.json({ status: 'OK' })
     },
-    // resetSenha: async (req, res) => {
-    //     let { email } = req.body
-    //     let urlFinal = `?tipo=reset_senha&user=${ email }`
-    //     let options = {
-    //         method: "get",
-    //         url: baseUrlApiGoogle + urlFinal,
-    //         headers: { "Content-Type": "application/json", 'Accept': 'application/json' },
-    //     }
-    //     let response = await axios(options)
-    //     return res.json({ status: response.data.status })
-    // },
     acessar: async (req, res) => {
         let { pass, nome, telefone, tipo } = req.body
         if ( telefone == "" || pass == "" ) return res.redirect('/erro?tipo=' + tipo)
@@ -129,7 +118,7 @@ module.exports = {
                     "3": configUser.R3,
                     "4": configUser.R4,
                     "5": configUser.R5,
-                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
+                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *Menu* para voltar ao início.",
                     "mensagem_principal": configUser.mensagem_principal,
                     "mensagem_topo": configUser.mensagem_topo,
                     "mensagem_rodape": configUser.mensagem_rodape,

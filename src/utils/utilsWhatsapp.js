@@ -7,12 +7,7 @@ module.exports = {
         if ( typeof stages[telClienteEmpresa] == 'undefined' ) {
             stages[telClienteEmpresa] = 'init'
         }
-        if ( msg.body.toString().toLowerCase() == 'voltar' ) {
-            stages[telClienteEmpresa] = "init"
-            await client.sendMessage(msg.from, configUser['0'])
-            return true
-        }
-        if ( msg.body.toString().toLowerCase() == 'sair' ) {
+        if ( msg.body.toString().toLowerCase() == 'menu' ) {
             stages[telClienteEmpresa] = "init"
             await client.sendMessage(msg.from, configUser['0'])
             return true
