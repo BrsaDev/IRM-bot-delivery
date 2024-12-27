@@ -17,28 +17,29 @@ module.exports = {
             await client.sendMessage(msg.from, configUser['0'])
             return true
         }
-        if ( msg.body == '1' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '1' && stages[telClienteEmpresa] != '61' ) {  //msg cardápio
             stages[telClienteEmpresa] = "11"
             await client.sendMessage(msg.from, "Ok! Informe o número do Pedido Ex: PED123456789")
             return true
         }
-        if ( msg.body == '2' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '2' && stages[telClienteEmpresa] != '61' ) {  //msg cardápio
+            await client.sendMessage(msg.from, configUser.mensagem_cardapio)
             await client.sendMessage(msg.from, configUser['2'])
             return true
         }
-        if ( msg.body == '3' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '3' && stages[telClienteEmpresa] != '61' ) {  //msg horário de funcionamento
             await client.sendMessage(msg.from, configUser['3'])
             return true
         }
-        if ( msg.body == '4' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '4' && stages[telClienteEmpresa] != '61' ) {  //msg tempo de entrega
             await client.sendMessage(msg.from, configUser['4'])
             return true
         }
-        if ( msg.body == '5' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '5' && stages[telClienteEmpresa] != '61' ) {  //msg endereço
             await client.sendMessage(msg.from, configUser['5'])
             return true
         }
-        if ( msg.body == '6' && stages[telClienteEmpresa] != '61' ) {
+        if ( msg.body == '6' && stages[telClienteEmpresa] != '61' ) {  //msg falar com atendente
             stages[telClienteEmpresa] = "61"
             await client.sendMessage(msg.from, configUser['6'])
             return true
@@ -55,6 +56,8 @@ module.exports = {
         if ( stages[telClienteEmpresa] == '61' ) { // passa para atendente humana
             return true
         }
+        // msg menu principal
+        await client.sendMessage(msg.from, configUser.mensagem_topo)
         return await client.sendMessage(msg.from, configUser['0'])
     }
 }

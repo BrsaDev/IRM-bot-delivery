@@ -30,7 +30,7 @@ app.post('/message', message)
 app.post('/checkUserConect', checkUserConect)
 app.post('/checkSendMessage', checkSendMessage)
 app.post('/receiver-status', receiverStatus)
-app.post('/criate-user', setInformationsUser)
+app.post('/create-user', setInformationsUser)
 
 app.listen(port, ()=> { console.log('Rodando as rotas na porta: ' + port) })
 

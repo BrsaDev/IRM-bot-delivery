@@ -121,12 +121,16 @@ module.exports = {
                 "senha": configUser.senha,
                 "user": configUser.usuario,
                 "pedidos": {},
-                "0": "Olá, Bem vindo! Posso te ajudar Nessas situações:\n1 -Pedido;\n2 - Cardapio;\n3 - Horario de Funcionamento;\n4 - Tempo e Taxa de Entrega;\n5 - Endereço;\n6 - Falar Com Atendente;\n\nÉ só Escolha umas das Opcoes por aqui mesmo!😄",
+                "0": `${configUser.mensagem_principal}\n1 -Pedido;\n2 - Cardapio;\n3 - Horario de Funcionamento;\n4 - Tempo e Taxa de Entrega;\n5 - Endereço;\n6 - Falar Com Atendente;\n\n${configUser.mensagem_rodape}`,
                 "2": configUser.R2,
                 "3": configUser.R3,
                 "4": configUser.R4,
                 "5": configUser.R5,
-                "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início."
+                "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
+                "mensagem_principal": configUser.mensagem_principal,
+                "mensagem_topo": configUser.mensagem_topo,
+                "mensagem_rodape": configUser.mensagem_rodape,
+                "mensagem_cardapio": configUser.mensagem_cardapio
             }
             fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
             return res.status(200).json({resultado: "Usuário configurado com sucesso!"})

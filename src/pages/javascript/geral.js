@@ -3,7 +3,6 @@ let user = localStorage.getItem('user')
 let login = document.querySelector('#btn-login')
 let logout = document.querySelector('#btn-logout')
 let qr = document.querySelector('#btn-qr')
-let cadastrar = document.querySelector('#btn-cadastrar')
 let boasVindas = document.querySelector('#boas-vindas')
 
 
@@ -42,9 +41,7 @@ logout.addEventListener('click', async function () {
     login.classList.remove('d-none')
     login.classList.add('d-block')
     logout.classList.remove('d-block')
-    logout.classList.add('d-none')
-    cadastrar.classList.remove('d-block')
-    cadastrar.classList.add('d-none')
+    logout.classList.add('d-none') 
     localStorage.clear()
     setRota('/home')
     await sleep(1000)
