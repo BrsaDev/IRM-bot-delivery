@@ -36,17 +36,6 @@ module.exports = {
         delete conexaoClientes[idCliente]
         return res.json({ status: 'OK' })
     },
-    // resetSenha: async (req, res) => {
-    //     let { email } = req.body
-    //     let urlFinal = `?tipo=reset_senha&user=${ email }`
-    //     let options = {
-    //         method: "get",
-    //         url: baseUrlApiGoogle + urlFinal,
-    //         headers: { "Content-Type": "application/json", 'Accept': 'application/json' },
-    //     }
-    //     let response = await axios(options)
-    //     return res.json({ status: response.data.status })
-    // },
     acessar: async (req, res) => {
         let { pass, nome, telefone, tipo } = req.body
         if ( telefone == "" || pass == "" ) return res.redirect('/erro?tipo=' + tipo)
