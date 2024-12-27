@@ -138,7 +138,7 @@ module.exports = {
                     "3": configUser.R3,
                     "4": configUser.R4,
                     "5": configUser.R5,
-                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
+                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *Menu* para voltar ao início.",
                     "mensagem_principal": configUser.mensagem_principal,
                     "mensagem_topo": configUser.mensagem_topo,
                     "mensagem_rodape": configUser.mensagem_rodape,
