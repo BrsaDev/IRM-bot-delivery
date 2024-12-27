@@ -102,41 +102,63 @@ module.exports = {
     receiverStatus: async (req, res) => {
         let configStatus = req.body
         let users = JSON.parse(fs.readFileSync(path.join(absolutePath(), `/model/users.json`)))
-        if ( typeof configStatus.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
-        if ( typeof users[configStatus.telefone] != 'undefined' ) {
-            users[configStatus.telefone].pedidos[configStatus.numero_pedido] = {status: configStatus.status}
-            fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
-            return res.status(200).json({resultado: "Status atualizado com sucesso!"})
-        }else {
-            return res.status(200).json({resultado: "Crie primeiro um usuário!"})
-        }
+        try {
+            if ( typeof configStatus.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
+            if ( typeof users[configStatus.telefone] != 'undefined' ) {
+                users[configStatus.telefone].pedidos[configStatus.numero_pedido] = {status: configStatus.status}
+                fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
+                return res.status(200).json({resultado: "Status atualizado com sucesso!"})
+            }else {
+                return res.status(200).json({resultado: "Crie primeiro um usuário!"})
+            }
+        }catch(erro){return res.status(200).json({resultado: {erro}})}
     },
     setInformationsUser: async (req, res) => {
         let configUser = req.body
         let users = JSON.parse(fs.readFileSync(path.join(absolutePath(), `/model/users.json`)))
-        if ( typeof configUser.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
-        if ( typeof users[configUser.telefone] == 'undefined' ) {
-            users[configUser.telefone] = {
-                "telefone": configUser.telefone,
-                "senha": configUser.senha,
-                "user": configUser.usuario,
-                "pedidos": {},
-                "0": `${configUser.mensagem_principal}\n1 -Pedido;\n2 - Cardapio;\n3 - Horario de Funcionamento;\n4 - Tempo e Taxa de Entrega;\n5 - Endereço;\n6 - Falar Com Atendente;\n\n${configUser.mensagem_rodape}`,
-                "2": configUser.R2,
-                "3": configUser.R3,
-                "4": configUser.R4,
-                "5": configUser.R5,
-                "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
-                "mensagem_principal": configUser.mensagem_principal,
-                "mensagem_topo": configUser.mensagem_topo,
-                "mensagem_rodape": configUser.mensagem_rodape,
-                "mensagem_cardapio": configUser.mensagem_cardapio
+        try {
+            if ( typeof configUser.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
+            if ( typeof users[configUser.telefone] == 'undefined' ) {
+                users[configUser.telefone] = {
+                    "telefone": configUser.telefone,
+                    "senha": configUser.senha,
+                    "user": configUser.usuario,
+                    "pedidos": {},
+                    "0": `${configUser.mensagem_principal}\n1 - Pedido;\n2 - Cardapio;\n3 - Horario de Funcionamento;\n4 - Tempo e Taxa de Entrega;\n5 - Endereço;\n6 - Falar Com Atendente;\n\n${configUser.mensagem_rodape}`,
+                    "2": configUser.R2,
+                    "3": configUser.R3,
+                    "4": configUser.R4,
+                    "5": configUser.R5,
+                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
+                    "mensagem_principal": configUser.mensagem_principal,
+                    "mensagem_topo": configUser.mensagem_topo,
+                    "mensagem_rodape": configUser.mensagem_rodape,
+                    "mensagem_cardapio": configUser.mensagem_cardapio
+                }
+                fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
+                return res.status(200).json({resultado: "Usuário configurado com sucesso!"})
             }
-            fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
-            return res.status(200).json({resultado: "Usuário configurado com sucesso!"})
-        }else {
-            return res.status(200).json({resultado: "Usuário já inserido!"})
-        }
+            else if ( typeof users[configUser.telefone] != 'undefined' ) {
+                users[configUser.telefone] = {
+                    "telefone": configUser.telefone,
+                    "senha": configUser.senha,
+                    "user": configUser.usuario,
+                    "pedidos": {},
+                    "0": `${configUser.mensagem_principal}\n1 -Pedido;\n2 - Cardapio;\n3 - Horario de Funcionamento;\n4 - Tempo e Taxa de Entrega;\n5 - Endereço;\n6 - Falar Com Atendente;\n\n${configUser.mensagem_rodape}`,
+                    "2": configUser.R2,
+                    "3": configUser.R3,
+                    "4": configUser.R4,
+                    "5": configUser.R5,
+                    "6": "Ok! Estou direcionando para um atendente humano.\nA qualquer momento digite *sair* para voltar ao início.",
+                    "mensagem_principal": configUser.mensagem_principal,
+                    "mensagem_topo": configUser.mensagem_topo,
+                    "mensagem_rodape": configUser.mensagem_rodape,
+                    "mensagem_cardapio": configUser.mensagem_cardapio
+                }
+                fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
+                return res.status(200).json({resultado: "Usuário atualizado com sucesso!"})
+            }
+        }catch(erro){return res.status(200).json({resultado: {erro}})}
     }
 }
 
