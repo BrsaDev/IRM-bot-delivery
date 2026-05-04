@@ -93,12 +93,20 @@ module.exports = {
         let users = JSON.parse(fs.readFileSync(path.join(absolutePath(), `/model/users.json`)))
         try {
             if ( typeof configStatus.telefone == 'undefined ' ) return res.status(200).json({resultado: "Necessário enviar o telefone."})
-            if ( typeof users[configStatus.telefone] != 'undefined' ) {
+            if ( configStatus.controle_envio ) {
+                if ( typeof conexaoClientes[configStatus.telefone] == "undefined" ) { return res.status(200).json({erro: true, resultado: "Verifique se o whatsapp está conectado no BOT!"}) }
+                await conexaoClientes[configStatus.telefone].sendMessage(`55${configStatus.telefone_cliente}@c.us`, configStatus.status)
                 users[configStatus.telefone].pedidos[configStatus.numero_pedido.toString().toUpperCase()] = {status: configStatus.status}
                 fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
-                return res.status(200).json({resultado: "Status atualizado com sucesso!"})
+                return res.status(200).json({resultado: "Mensagem enviada e status atualizado com sucesso!"})
             }else {
-                return res.status(200).json({resultado: "Crie primeiro um usuário!"})
+                if ( typeof users[configStatus.telefone] != 'undefined' ) {
+                    users[configStatus.telefone].pedidos[configStatus.numero_pedido.toString().toUpperCase()] = {status: configStatus.status}
+                    fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
+                    return res.status(200).json({resultado: "Status atualizado com sucesso!"})
+                }else {
+                    return res.status(200).json({resultado: "Crie primeiro um usuário!"})
+                }
             }
         }catch(erro){return res.status(200).json({resultado: {erro}})}
     },

@@ -17,7 +17,7 @@ const session = async function (idCliente) {
         puppeteer: {
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
         }
-    });
+    })
     console.log('iniciando o cliente ' + idCliente)
 
     client.initialize()
@@ -53,9 +53,17 @@ const session = async function (idCliente) {
 
     client.on(`disconnected`, (reason) => {
         console.log(`disconnected`, reason);
-        client.destroy();
-        client.initialize();
-        clienteConfigSet(idCliente, { tipo: "autenticado", value: false })
+
+        try {
+            await client.destroy();
+        } catch (e) {}
+
+        clienteConfigSet(idCliente, { tipo: "autenticado", value: false });
+
+        // delay evita race condition com Chromium
+        setTimeout(() => {
+            session(idCliente); // 🔥 cria NOVO client
+        }, 2000);
     });
 
     client.on('message_ack', async (msg, ack) => {
@@ -65,7 +73,8 @@ const session = async function (idCliente) {
     client.on(`message_create`, async msg => {
         if (msg.from == "status@broadcast" || msg.type == "e2e_notification" || msg.type == "protocol") return true
         let users = JSON.parse(fs.readFileSync(`${__dirname}/model/users.json`))
-        if ( typeof users[msg.to.slice(2).replace('@c.us', '')] != 'undefined' && msg.from != msg.to ) { 
+        console.log('dentro do message-create: ', msg.body)
+        if ( typeof users[msg.to.slice(2).replace('@c.us', '')] != 'undefined' && msg.from != msg.to && msg.body != "" ) { 
             console.log('\n\nmessage de ' + msg.from + ' para ' + msg.to + ' com a msg => ' + msg.body + '\n\n =>>>---', users[msg.to.slice(2).replace('@c.us', '')])
             await sendMessage(client, msg, users[msg.to.slice(2).replace('@c.us', '')])
             return true
