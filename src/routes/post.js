@@ -30,9 +30,18 @@ module.exports = {
     },
     closeSession: async (req, res) => {
         let { idCliente } = req.body
+        if ( !conexaoClientes[idCliente] ) return res.json({ status: 'OK' })
+
         clienteConfigSet(idCliente, { tipo: "inicializado", value: false })
         clienteConfigSet(idCliente, { tipo: "autenticado", value: false })
-        await conexaoClientes[idCliente].logout()
+        try {
+           await conexaoClientes[idCliente].logout() 
+        }catch(e) { console.log('erro no logout:', e.message) }
+
+        try {
+            await conexaoClientes[idCliente].destroy(); // SEMPRE destrói depois
+        } catch (e) {}
+        
         delete conexaoClientes[idCliente]
         return res.json({ status: 'OK' })
     },
