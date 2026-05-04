@@ -51,7 +51,7 @@ const session = async function (idCliente) {
         console.log(`Cliente [ ${ idCliente } ] preparado para uso.`);
     });
 
-    client.on(`disconnected`, (reason) => {
+    client.on(`disconnected`, async (reason) => {
         console.log(`disconnected`, reason);
 
         try {
