@@ -1,7 +1,7 @@
 const express = require('express');
 const { resetClientesConfigSet } = require("./utils/utils");
 const { raiz, home, login, qr, qrcode, cadastrar, erro } = require('./routes/get')
-const { initSession, closeSession, receiverStatus, setInformationsUser, acessar, message, checkUserConect, checkSendMessage } = require('./routes/post')
+const { initSession, closeSession, receiverStatus, deleteUser, setInformationsUser, acessar, message, checkUserConect, checkSendMessage } = require('./routes/post')
 
 let port = process.env.PORT || 3000
 const app = express()
@@ -31,6 +31,7 @@ app.post('/checkUserConect', checkUserConect)
 app.post('/checkSendMessage', checkSendMessage)
 app.post('/receiver-status', receiverStatus)
 app.post('/create-user', setInformationsUser)
+app.post('/delete-user', deleteUser)
 
 app.listen(port, ()=> { console.log('Rodando as rotas na porta: ' + port) })
 

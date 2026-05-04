@@ -110,6 +110,16 @@ module.exports = {
             }
         }catch(erro){return res.status(200).json({resultado: {erro}})}
     },
+    deleteUser: async (req, res) => {
+        let { telefone } = req.body
+        let users = JSON.parse(fs.readFileSync(path.join(absolutePath(), '/model/users.json')))
+        if ( typeof users[telefone] != 'undefined' ) {
+            delete users[telefone]
+            fs.writeFileSync(path.join(absolutePath(), '/model/users.json'), JSON.stringify(users))
+            return res.status(200).json({resultado: "Usuário deletado com sucesso!"})
+        }
+        else return res.status(200).json({resultado: "Usuário não encontrado!"})
+    },
     setInformationsUser: async (req, res) => {
         let configUser = req.body
         let users = JSON.parse(fs.readFileSync(path.join(absolutePath(), `/model/users.json`)))
